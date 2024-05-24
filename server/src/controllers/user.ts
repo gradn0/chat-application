@@ -13,7 +13,6 @@ export const signup = async (req: Request, res: Response) => {
     const user = await pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id", [username, email, hash]);
     const token = createWebToken(user.rows[0].id);
     res.status(201).json({email, username, token});
-    
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
   }
@@ -30,9 +29,7 @@ export const login = async (req: Request, res: Response) => {
     } else {
       throw new Error("Incorrect username or password");
     }
-    
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
   }
-  
 }
