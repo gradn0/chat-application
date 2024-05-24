@@ -8,17 +8,18 @@ export const createWebToken = (id: string) => {
 }
 
 export const validateSignup = async (email: string, username: string, password: string) => {
-  if (!email || !password) {
+  if (!email || !password || !username) {
     throw new Error("All fields must be filled");
   }
 
-  const existingEmail = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-  const existingUsername = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
-  
-  if (existingEmail.rows.length > 0) {
+  const existingEmail = (await pool.query("SELECT * FROM users WHERE email = $1", [email])).rows[0];
+  const existingUsername = (await pool.query("SELECT * FROM users WHERE username = $1", [username])).rows[0];
+
+  if (existingEmail) {
     throw new Error("Email exists");
   }
-  if (existingUsername.rows.length > 0) {
+
+  if (existingUsername) {
     throw new Error("Username exists");
   }
 
@@ -27,4 +28,13 @@ export const validateSignup = async (email: string, username: string, password: 
 
   if (!emailRegex.test(email)) throw new Error("Invalid email");
   if (!passwordRegex.test(password)) throw new Error("Password to weak");
+}
+
+export const validateLogin = async (username: string, password: string) => {
+  if (!username || !password) {
+    throw new Error("All fields must be filled");
+  }
+  const user = (await pool.query("SELECT * FROM users WHERE email = $1 OR username = $1", [username])).rows[0];
+  if (user) return user;
+  throw new Error("Incorrect username or password");
 }
