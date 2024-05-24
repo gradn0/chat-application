@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { pool } from "../db";
+import pool from "../db";
 import bcrypt from "bcrypt";
 import { createWebToken, validateLogin, validateSignup } from "../utils/auth";
 import { getErrorMessage } from "../app";

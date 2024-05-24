@@ -1,4 +1,4 @@
-import { pool } from "../db";
+import pool from "../db";
 import jwt from "jsonwebtoken";
 
 export const createWebToken = (id: string) => {
