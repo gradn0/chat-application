@@ -32,6 +32,11 @@ button {
 .text-heading {
   @apply text-2xl sm:text-3xl font-bold
 }
+
+.text-small {
+  @apply text-xs sm:text-base;
+}
+
 * {
   margin: 0;
   padding: 0;
