@@ -34,7 +34,7 @@ button {
 
 /* Typography */
 .text-heading {
-  @apply text-2xl sm:text-3xl font-bold
+  @apply text-2xl sm:text-3xl;
 }
 
 .text-small {

@@ -1,4 +1,4 @@
-export interface Chat {
+export interface IChat {
   title: string;
   unread: number;
   icon_url: string;

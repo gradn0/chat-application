@@ -33,7 +33,7 @@ const SignupPage = () => {
     <div className="size-screen flex items-center justify-center h-[100vh]">
       
       <form className="flex flex-col gap-3 sm:gap-4 items-center" onSubmit={handleSubmit}>
-        <h2 className="text-heading mb-8">Login</h2>
+        <h2 className="text-heading font-bold mb-8">Login</h2>
 
         <input className="authField" type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
         <input className="authField" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>

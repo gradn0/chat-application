@@ -1,7 +1,7 @@
 import ChatList from "./ChatList"
 import { ChatIcon, ContactsIcon } from "./Icons"
 
-const chats = [
+const chats = [ // temp
   {
     title: "Richard Hendrics",
     icon_url: "https://gravatar.com/avatar/d410f9be84581256aa7a1d57640443fb?s=400&d=robohash&r=x",
@@ -12,9 +12,9 @@ const chats = [
 
 const Sidebar = () => {
   return (
-    <div className="bg-dark_accent size-full p-[2em] flex flex-col gap-[1em]">
+    <div className="bg-dark_accent size-full p-[2em] flex flex-col gap-[1em] rounded-r-xl">
       <div className="flex items-center">
-        <h2 className="text-heading text-off_white font-medium mb-[1em]">PhotoShare</h2>
+        <h2 className="text-heading font-bold text-off_white mb-[1em]">PhotoShare</h2>
       </div>
       <input className="searchBar" type="text" placeholder="Search..."/>
       <div className="flex gap-[3em]">

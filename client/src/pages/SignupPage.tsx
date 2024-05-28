@@ -34,7 +34,7 @@ const SignupPage = () => {
     <div className="size-screen flex items-center justify-center h-[100vh]">
       
       <form className="flex flex-col gap-3 sm:gap-4 items-center" onSubmit={(e) => handleSubmit(e)}>
-        <h2 className="text-heading mb-10">Create Account</h2>
+        <h2 className="text-heading font-bold mb-10">Create Account</h2>
 
         <input className="authField" type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
         <input className="authField" type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>

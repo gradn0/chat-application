@@ -8,6 +8,8 @@ export default {
     extend: {
       colors: {
         off_white: "#f5f5f5",
+        dark_white: "f8f9fb",
+        grey: "#e2e2e2",
         accent: "#14b8a6",
         dark_accent: "#0f766e",
       }

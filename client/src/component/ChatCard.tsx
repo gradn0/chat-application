@@ -1,6 +1,6 @@
-import { Chat } from "../Types"
+import { IChat } from "../Types"
 
-const ChatCard = ({chat, selected}: {chat: Chat, selected:boolean}) => {
+const ChatCard = ({chat, selected}: {chat: IChat, selected:boolean}) => {
   return (
     <div className={`flex items-center gap-4 p-2 rounded-md cursor-pointer ${selected ? "bg-accent bg-opacity-60" : ""}`}>
       <img className="size-[3em] bg-white rounded-full" src={chat.icon_url} alt="chat avatar" />
