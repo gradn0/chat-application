@@ -12,7 +12,10 @@ import ProtectedComponent from './component/ProtectedComponent.tsx'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedComponent><App /></ProtectedComponent>
+    element: 
+    <ProtectedComponent>
+      <App />
+    </ProtectedComponent>
   },
   {
     path: "/login",

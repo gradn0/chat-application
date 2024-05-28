@@ -20,12 +20,16 @@ body {
 
 button {
   @apply py-2 px-5 rounded-full focus:outline-none border-[1px] 
-  bg-teal-500 transition font-semibold text-off_white hover:bg-white hover:text-black border-teal-500;
+  bg-teal-500 transition font-semibold text-off_white hover:bg-white hover:text-black border-accent;
 }
 
 /* Components */
 .authField {
-  @apply py-2 px-5 rounded-full focus:outline-none border-[1px] hover:border-teal-500 transition;
+  @apply py-2 px-5 rounded-full focus:outline-none border-[1px] hover:border-accent transition;
+}
+
+.searchBar {
+  @apply bg-teal-500 text-off_white bg-opacity-60 focus:outline-none p-3 placeholder:text-off_white;
 }
 
 /* Typography */
@@ -34,7 +38,7 @@ button {
 }
 
 .text-small {
-  @apply text-xs sm:text-base;
+  @apply text-xs sm:text-sm;
 }
 
 * {
