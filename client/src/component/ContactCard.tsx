@@ -1,4 +1,4 @@
-import { IContact } from "../Types"
+import { IContact } from "../common"
 
 const ContactCard = ({contact, selected}: {contact: IContact, selected:boolean}) => {
   return (

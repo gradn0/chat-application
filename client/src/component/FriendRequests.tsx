@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { fetchFromAPI } from "../helpers"
-import { IFriendRequest } from "../Types";
+import { IFriendRequest } from "../common";
 import FriendRequestCard from "./FriendRequestCard";
 
 const FriendRequests = () => {

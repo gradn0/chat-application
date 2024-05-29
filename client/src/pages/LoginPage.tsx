@@ -1,8 +1,8 @@
 import { FormEvent, useState } from "react"
 import { useAuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
-import { getErrorMessage } from "../common";
 import useMutate from "../hooks/useMutate";
+import { getErrorMessage } from "../common";
 
 const SignupPage = () => {
   const [username, setUsername] = useState("");

@@ -1,4 +1,4 @@
-import { IChat } from "../Types"
+import { IChat } from "../common"
 
 const ChatCard = ({chat, selected}: {chat: IChat, selected:boolean}) => {
   return (

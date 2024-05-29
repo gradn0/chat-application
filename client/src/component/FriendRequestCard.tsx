@@ -1,4 +1,4 @@
-import { IFriendRequest } from "../Types"
+import { IFriendRequest } from "../common"
 
 const FriendRequestCard = ({request}: {request: IFriendRequest}) => {
   return (
