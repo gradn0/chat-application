@@ -48,3 +48,17 @@ export const createFriendRequest = async (req: any, res: Response) => {
     res.status(400).json({Error: getErrorMessage(error)});
   }
 }
+
+export const getFriendRequests = async (req: any, res: Response) => {
+  const {id} = req.user;
+  try {
+
+    const requests = (await db.query(
+      "SELECT users.username, relationships.request_id, relationships.id FROM users LEFT JOIN relationships on users.id = relationships.request_id WHERE reciever_id = $1 AND status = $2", 
+      [id, 'pending'])).rows;
+    
+    res.status(200).json(requests);
+  } catch (error) {
+    res.status(400).json({Error: getErrorMessage(error)});
+  }
+}

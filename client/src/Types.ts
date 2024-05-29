@@ -11,3 +11,9 @@ export interface IContact {
   name: string;
   icon_url: string;
 }
+
+export interface IFriendRequest {
+  id: number,
+  request_id: number,
+  username: string
+}

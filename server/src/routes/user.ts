@@ -1,5 +1,5 @@
 import express from "express";
-import { createFriendRequest, login, signup } from "../controllers/user";
+import { createFriendRequest, getFriendRequests, login, signup } from "../controllers/user";
 import { auth } from "../middleware/auth";
 
 const router = express.Router();
@@ -9,5 +9,6 @@ router.post("/login", (req, res) => login(req, res));
 
 router.use(auth);
 router.post("/friendRequest/:username", (req, res) => createFriendRequest(req, res));
+router.get("/friendRequests", (req, res) => getFriendRequests(req, res));
 
 export default router;
