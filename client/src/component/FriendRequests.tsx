@@ -1,6 +1,8 @@
 const FriendRequests = () => {
   return (
-    <div>FriendRequests</div>
+    <div>
+      
+    </div>
   )
 }
 

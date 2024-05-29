@@ -1,7 +1,8 @@
 import { useState } from "react"
 import ContactCard from "./ContactCard"
 import { AddContactIcon } from "./Icons"
-import useApi from "../hooks/useApi"
+import { useMutation } from "@tanstack/react-query"
+import { fetchFromAPI } from "../helpers"
 
 const contacts = [ // temp
   {
@@ -13,11 +14,14 @@ const contacts = [ // temp
 
 const ContactList = () => {
   const [text, setText] = useState("");
-  const {mutateAsync: friendRequestMutation} = useApi("POST");
+
+  const {mutateAsync: postFriendRequest} = useMutation({
+    mutationFn: (query: string) => fetchFromAPI(query, "POST")
+  })
 
   const sendFriendRequest = async () => {
     setText("");
-    await friendRequestMutation(`user/friendRequest/${text}`);
+    await postFriendRequest(`user/friendRequest/${text}`);
   }
 
   return (

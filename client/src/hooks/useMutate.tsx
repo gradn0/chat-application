@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query"
 import { useAuthContext } from "../context/authContext";
 
-type Method = "GET" | "POST";
+type Method = "DELETE" | "POST" | "PATCH";
 
-const useApi = (method: Method) => {
+const useMutate = (method: Method, query: string, body?:any) => {
   const {state} = useAuthContext();
   return useMutation({
     onError: (error) => {throw error},
-    mutationFn: async (query: string, body?:any) => {
+    mutationFn: async () => {
       const res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/${query}`, {
         method: method,
         body: JSON.stringify(body),
@@ -21,4 +21,4 @@ const useApi = (method: Method) => {
   })
 }
 
-export default useApi
+export default useMutate

@@ -1,8 +1,8 @@
 import { FormEvent, useState } from "react"
-import useApi from "../hooks/useApi";
 import { useAuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../common";
+import useMutate from "../hooks/useMutate";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ const SignupPage = () => {
   const {dispatch} = useAuthContext();
   const navigate = useNavigate();
 
-  const {mutateAsync: signupMutation, isPending} = useApi("POST", "user/signup", {email, username, password});
+  const {mutateAsync: signupMutation, isPending} = useMutate("POST", "user/signup", {email, username, password});
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
