@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react"
 import useApi from "../hooks/useApi";
 import { useAuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import { getErrorMessage } from "../common";
 
 const SignupPage = () => {
   const [username, setUsername] = useState("");
@@ -10,7 +11,7 @@ const SignupPage = () => {
   const {dispatch} = useAuthContext();
   const navigate = useNavigate();
 
-  const {mutateAsync: loginMutation, isSuccess, isPending} = useApi("POST", "user/login", {username, password});
+  const {mutateAsync: loginMutation, isPending} = useApi("POST", "user/login", {username, password});
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -18,15 +19,12 @@ const SignupPage = () => {
     try {
       const data = await loginMutation();
       if (data.Error) {
-        setError(data.Error);
+        throw new Error(data.Error);
       }
-      if (isSuccess) {
-        dispatch({type: "login", payload: data});
-        navigate("/");
-      }
+      dispatch({type: "login", payload: data});
+      navigate("/");
     } catch (error) {
-      setError("Something went wrong");
-    }
+      setError(getErrorMessage(error));    }
   }
   
   return (

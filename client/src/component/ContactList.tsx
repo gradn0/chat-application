@@ -1,6 +1,8 @@
 import { useState } from "react"
 import ContactCard from "./ContactCard"
 import { AddContactIcon } from "./Icons"
+import socket from "../socket"
+import { useAuthContext } from "../context/authContext"
 
 const contacts = [ // temp
   {
@@ -12,10 +14,11 @@ const contacts = [ // temp
 
 const ContactList = () => {
   const [text, setText] = useState("");
+  const {state: authState} = useAuthContext();
 
   const sendFriendRequest = () => {
     setText("");
-    console.log(text);
+    socket.emit("friend_request", {username: text, request_id: authState.user?.id});
   }
   return (
     <div className="flex flex-col h-full">

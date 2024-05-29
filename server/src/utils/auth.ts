@@ -1,4 +1,4 @@
-import pool from "../db";
+import db from "../db";
 import jwt from "jsonwebtoken";
 
 export const createWebToken = (id: string) => {
@@ -12,8 +12,8 @@ export const validateSignup = async (email: string, username: string, password: 
     throw new Error("All fields must be filled");
   }
 
-  const existingEmail = (await pool.query("SELECT * FROM users WHERE email = $1", [email])).rows[0];
-  const existingUsername = (await pool.query("SELECT * FROM users WHERE username = $1", [username])).rows[0];
+  const existingEmail = (await db.query("SELECT * FROM users WHERE email = $1", [email])).rows[0];
+  const existingUsername = (await db.query("SELECT * FROM users WHERE username = $1", [username])).rows[0];
 
   if (existingEmail) {
     throw new Error("Email exists");
@@ -34,7 +34,7 @@ export const validateLogin = async (username: string, password: string) => {
   if (!username || !password) {
     throw new Error("All fields must be filled");
   }
-  const user = (await pool.query("SELECT * FROM users WHERE email = $1 OR username = $1", [username])).rows[0];
+  const user = (await db.query("SELECT * FROM users WHERE email = $1 OR username = $1", [username])).rows[0];
   if (user) return user;
   throw new Error("Incorrect username or password");
 }

@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 
-const pool = new Pool({
+const db = new Pool({
   user: process.env.PG_USER,
   password: process.env.PG_PASSWORD,
   host: process.env.PG_HOST,
@@ -8,4 +8,4 @@ const pool = new Pool({
   database: process.env.PG_DATABASE
 })
 
-export default pool;
+export default db;

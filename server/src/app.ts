@@ -4,6 +4,7 @@ import "dotenv/config";
 import userRouter from "./routes/user";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import handleSockets from "./routes/socket";
 
 export const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message;
@@ -20,7 +21,7 @@ app.use(express.json());
 app.use("/api/user", userRouter);
 
 io.on("connection", (socket) => {
-  console.log(socket.id);
+  handleSockets(socket);
 })
 
 httpServer.listen(port, () => {

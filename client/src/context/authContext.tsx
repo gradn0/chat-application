@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useReducer } from "react"
 
 interface User {
-  email: string;
+  id: number;
   username: string;
   token: string;
 }
