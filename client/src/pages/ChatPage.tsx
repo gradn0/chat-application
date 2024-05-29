@@ -5,7 +5,7 @@ const chat = { // temp
   latest_message: "hello there"
 }
 
-const Chat = () => {
+const ChatPage = () => {
   
   return (
     <div className="size-full bg-dark_white flex flex-col">
@@ -20,4 +20,4 @@ const Chat = () => {
   )
 }
 
-export default Chat
+export default ChatPage
