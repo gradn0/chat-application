@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import userRouter from "./routes/user";
+import { Server } from "socket.io";
+import { createServer } from "http";
 
 export const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message;
@@ -10,11 +12,17 @@ export const getErrorMessage = (error: unknown) => {
 
 const app = express();
 const port = process.env.PORT;
+const httpServer = createServer(app);
+const io = new Server(httpServer);
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/user", userRouter);
 
-app.listen(port, () => {
+io.on("connection", (socket) => {
+  console.log(socket.id);
+})
+
+httpServer.listen(port, () => {
   console.log(`Listening on port ${port}`);
 })

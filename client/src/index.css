@@ -29,7 +29,7 @@ button {
 }
 
 .searchBar {
-  @apply bg-teal-500 text-off_white bg-opacity-60 focus:outline-none p-3 placeholder:text-off_white;
+  @apply bg-teal-500 text-off_white bg-opacity-60 focus:outline-none placeholder:text-neutral-200;
 }
 
 /* Typography */
