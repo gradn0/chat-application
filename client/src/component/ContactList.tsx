@@ -1,8 +1,7 @@
 import { useState } from "react"
 import ContactCard from "./ContactCard"
 import { AddContactIcon } from "./Icons"
-import socket from "../socket"
-import { useAuthContext } from "../context/authContext"
+import useApi from "../hooks/useApi"
 
 const contacts = [ // temp
   {
@@ -14,12 +13,13 @@ const contacts = [ // temp
 
 const ContactList = () => {
   const [text, setText] = useState("");
-  const {state: authState} = useAuthContext();
+  const {mutateAsync: friendRequestMutation} = useApi("POST");
 
-  const sendFriendRequest = () => {
+  const sendFriendRequest = async () => {
     setText("");
-    socket.emit("friend_request", {username: text, request_id: authState.user?.id});
+    await friendRequestMutation(`user/friendRequest/${text}`);
   }
+
   return (
     <div className="flex flex-col h-full">
       {contacts.map(contact => <ContactCard key={contact.id} contact={contact} selected={false}/>)}
