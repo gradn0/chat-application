@@ -12,8 +12,13 @@ const Sidebar = () => {
   const [tab, setTab] = useState<TTab>("chats");
   
   const {data: requests} = useQuery({
-    queryKey: ["getFriendRequests"],
-    queryFn: async () => await fetchFromAPI("relationship/pending", "GET")
+    queryKey: ["getRequests"],
+    queryFn: async () => await fetchFromAPI("relationship/requests", "GET")
+  })
+
+  const {data: contacts} = useQuery({
+    queryKey: ["getContacts"],
+    queryFn: async () => await fetchFromAPI("relationship/friends", "GET")
   })
 
   return (
@@ -31,7 +36,7 @@ const Sidebar = () => {
       </div>
       <input className="searchBar p-3" type="text" placeholder="Search..."/>
       {tab === "chats" && <ChatList />}
-      {tab === "contacts" && <ContactList />}
+      {tab === "contacts" && <ContactList contacts={contacts}/>}
       {tab === "requests" && <FriendRequests requests={requests}/>}
     </div>
   )

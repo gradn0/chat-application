@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import { IFriendRequest } from "../common"
+import { IRelationship } from "../common"
 import { CrossIcon, TickIcon } from "./Icons"
 import { fetchFromAPI } from "../helpers";
 import { queryClient } from "../main";
 
 type TResponse = "approved" | "denied";
 
-const FriendRequestCard = ({request}: {request: IFriendRequest}) => {
+const FriendRequestCard = ({request}: {request: IRelationship}) => {
   const {mutateAsync: responseMutation} = useMutation({
     mutationFn: (status: TResponse) => fetchFromAPI(`relationship/${request.id}`, "PATCH", {status})
   });

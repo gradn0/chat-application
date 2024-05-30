@@ -6,13 +6,7 @@ export interface IChat {
   latest_message: string;
 }
 
-export interface IContact {
-  id: number,
-  name: string;
-  icon_url: string;
-}
-
-export interface IFriendRequest {
+export interface IRelationship {
   id: number,
   username: string,
 }

@@ -1,16 +1,16 @@
-import { IFriendRequest } from "../common";
+import { IRelationship } from "../common";
 import FriendRequestCard from "./FriendRequestCard";
 import { useEffect } from "react";
 import { queryClient } from "../main";
 
-const FriendRequests = ({requests}: {requests: IFriendRequest[]}) => {
+const FriendRequests = ({requests}: {requests: IRelationship[]}) => {
   useEffect(() => {
-    queryClient.fetchQuery({queryKey: ["getFriendRequests"]});
+    queryClient.fetchQuery({queryKey: ["getRequests"]});
   }, [])
   
   return (
     <div className="flex flex-col gap-[1em]">
-      {requests && requests.map((request: IFriendRequest) => <FriendRequestCard key={request.id} request={request} />)}
+      {requests && requests.map((request: IRelationship) => <FriendRequestCard key={request.id} request={request} />)}
     </div>
   )
 }

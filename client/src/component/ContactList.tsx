@@ -1,18 +1,12 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ContactCard from "./ContactCard"
 import { AddContactIcon } from "./Icons"
 import { useMutation } from "@tanstack/react-query"
 import { fetchFromAPI } from "../helpers"
+import { IRelationship } from "../common"
+import { queryClient } from "../main"
 
-const contacts = [ // temp
-  {
-    id: 2,
-    name: "Richard Hendrics",
-    icon_url: "https://gravatar.com/avatar/d410f9be84581256aa7a1d57640443fb?s=400&d=robohash&r=x",
-  }
-]
-
-const ContactList = () => {
+const ContactList = ({contacts}: {contacts: IRelationship[]}) => {
   const [text, setText] = useState("");
 
   const {mutateAsync: postFriendRequest} = useMutation({
@@ -23,6 +17,10 @@ const ContactList = () => {
     setText("");
     await postFriendRequest(`relationship/${text}`);
   }
+
+  useEffect(() => {
+    queryClient.fetchQuery({queryKey: ["getContacts"]});
+  }, [])
 
   return (
     <div className="flex flex-col h-full">
