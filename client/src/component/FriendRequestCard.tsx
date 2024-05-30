@@ -8,7 +8,7 @@ type TResponse = "approved" | "denied";
 
 const FriendRequestCard = ({request}: {request: IFriendRequest}) => {
   const {mutateAsync: responseMutation} = useMutation({
-    mutationFn: (status: TResponse) => fetchFromAPI(`user/friendRequest/${request.id}`, "PATCH", {status})
+    mutationFn: (status: TResponse) => fetchFromAPI(`relationship/${request.id}`, "PATCH", {status})
   });
 
   const respondToRequest = async (response: TResponse) => {

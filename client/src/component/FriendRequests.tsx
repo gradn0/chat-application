@@ -6,7 +6,7 @@ import FriendRequestCard from "./FriendRequestCard";
 const FriendRequests = () => {
   const {data: requests} = useQuery({
     queryKey: ["getFriendRequests"],
-    queryFn: () => fetchFromAPI("user/friendRequests", "GET")
+    queryFn: () => fetchFromAPI("relationship/pending", "GET")
   })
   
   return (

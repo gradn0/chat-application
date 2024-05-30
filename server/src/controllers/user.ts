@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import db from "../db";
 import bcrypt from "bcrypt";
 import { createWebToken, validateLogin, validateSignup } from "../utils/auth";
-import { getErrorMessage } from "../app";
+import { getErrorMessage } from "../common";
 
 export const signup = async (req: Request, res: Response) => {
   const {username, email, password} = req.body;
@@ -29,47 +29,6 @@ export const login = async (req: Request, res: Response) => {
     } else {
       throw new Error("Incorrect username or password");
     }
-  } catch (error) {
-    res.status(400).json({Error: getErrorMessage(error)});
-  }
-}
-
-export const createFriendRequest = async (req: any, res: Response) => {
-  const username = req.params.username;
-  const {id} = req.user;
-  try {
-    const reciever = (await db.query("SELECT id FROM users WHERE username = $1", [username])).rows[0];
-    if (reciever) {
-      await db.query("INSERT INTO relationships (request_id, reciever_id, status) VALUES ($1, $2, $3)", [id, reciever.id, 'pending']);
-    } else {
-      throw new Error("user does not exist");
-    }
-  } catch (error) {
-    res.status(400).json({Error: getErrorMessage(error)});
-  }
-}
-
-export const getFriendRequests = async (req: any, res: Response) => {
-  const {id} = req.user;
-  try {
-
-    const requests = (await db.query(
-      "SELECT users.username, relationships.request_id, relationships.id FROM users LEFT JOIN relationships on users.id = relationships.request_id WHERE reciever_id = $1 AND status = $2", 
-      [id, 'pending'])).rows;
-    
-    res.status(200).json(requests);
-  } catch (error) {
-    res.status(400).json({Error: getErrorMessage(error)});
-  }
-}
-
-export const editFriendRequest = async (req: any, res: Response) => {
-  const {id} = req.params;
-  const {status} = req.body;
-
-  try {
-    await db.query("UPDATE relationships SET status = $1 WHERE id = $2", [status, id]);
-    return res.status(200).json({id, status});
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
   }

@@ -21,7 +21,7 @@ const ContactList = () => {
 
   const sendFriendRequest = async () => {
     setText("");
-    await postFriendRequest(`user/friendRequest/${text}`);
+    await postFriendRequest(`relationship/${text}`);
   }
 
   return (

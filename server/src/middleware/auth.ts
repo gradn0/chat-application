@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { getErrorMessage } from "../app";
+import { getErrorMessage } from "../common";
 import db from "../db";
 
 interface IJWTPayload {
