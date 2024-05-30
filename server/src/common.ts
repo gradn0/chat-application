@@ -3,4 +3,4 @@ export const getErrorMessage = (error: unknown) => {
   return String(error);
 }
 
-export type TStatus = "pending" | "approved" | "denied";
+export type TStatus = "pending" | "approved";

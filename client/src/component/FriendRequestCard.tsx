@@ -7,14 +7,18 @@ import { queryClient } from "../main";
 type TResponse = "approved" | "denied";
 
 const FriendRequestCard = ({request}: {request: IRelationship}) => {
-  const {mutateAsync: responseMutation} = useMutation({
-    mutationFn: (status: TResponse) => fetchFromAPI(`relationship/${request.id}`, "PATCH", {status})
+  const {mutateAsync: acceptMutation} = useMutation({
+    mutationFn: () => fetchFromAPI(`relationship/${request.id}`, "PATCH", {status: "approved"})
+  });
+  const {mutateAsync: denyMutation} = useMutation({
+    mutationFn: () => fetchFromAPI(`relationship/${request.id}`, "DELETE")
   });
 
   const respondToRequest = async (response: TResponse) => {
     try {
-      await responseMutation(response);
-      await queryClient.invalidateQueries({queryKey: ["getFriendRequests"]})
+      if (response === "approved") await acceptMutation();
+      if (response === "denied") await denyMutation();
+      await queryClient.invalidateQueries({queryKey: ["getRequests"]})
     } catch (error) {
       console.log(error); 
     }

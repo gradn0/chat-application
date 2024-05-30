@@ -24,7 +24,7 @@ CREATE TABLE messages(
   CONSTRAINT fk_room_id FOREIGN KEY(room_id) REFERENCES rooms (id)
 );
 
-CREATE TYPE rel_status AS ENUM ('pending', 'approved', 'denied');
+CREATE TYPE rel_status AS ENUM ('pending', 'approved');
 
 CREATE TABLE relationships(
   id BIGSERIAL PRIMARY KEY NOT NULL, 
