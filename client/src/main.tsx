@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   }
 ])
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

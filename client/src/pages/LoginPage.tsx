@@ -24,7 +24,8 @@ const SignupPage = () => {
       dispatch({type: "login", payload: data});
       navigate("/");
     } catch (error) {
-      setError(getErrorMessage(error));    }
+      setError(getErrorMessage(error));
+    }
   }
   
   return (

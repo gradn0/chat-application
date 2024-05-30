@@ -62,3 +62,15 @@ export const getFriendRequests = async (req: any, res: Response) => {
     res.status(400).json({Error: getErrorMessage(error)});
   }
 }
+
+export const editFriendRequest = async (req: any, res: Response) => {
+  const {id} = req.params;
+  const {status} = req.body;
+
+  try {
+    await db.query("UPDATE relationships SET status = $1 WHERE id = $2", [status, id]);
+    return res.status(200).json({id, status});
+  } catch (error) {
+    res.status(400).json({Error: getErrorMessage(error)});
+  }
+}
