@@ -23,7 +23,7 @@ export const getRelationships = async (req: any, res: Response) => {
   try {
 
     const requests = (await db.query(
-      "SELECT * FROM users LEFT JOIN relationships on users.id = relationships.request_id WHERE reciever_id = $1 AND status = $2", 
+      "SELECT relationships.id, users.username FROM users LEFT JOIN relationships on users.id = relationships.request_id WHERE reciever_id = $1 AND status = $2", 
       [id, status])).rows;
     
     res.status(200).json(requests);

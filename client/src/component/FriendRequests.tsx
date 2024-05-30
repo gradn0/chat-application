@@ -1,13 +1,12 @@
-import { useQuery } from "@tanstack/react-query"
-import { fetchFromAPI } from "../helpers"
 import { IFriendRequest } from "../common";
 import FriendRequestCard from "./FriendRequestCard";
+import { useEffect } from "react";
+import { queryClient } from "../main";
 
-const FriendRequests = () => {
-  const {data: requests} = useQuery({
-    queryKey: ["getFriendRequests"],
-    queryFn: () => fetchFromAPI("relationship/pending", "GET")
-  })
+const FriendRequests = ({requests}: {requests: IFriendRequest[]}) => {
+  useEffect(() => {
+    queryClient.fetchQuery({queryKey: ["getFriendRequests"]});
+  }, [])
   
   return (
     <div className="flex flex-col gap-[1em]">

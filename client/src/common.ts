@@ -14,8 +14,7 @@ export interface IContact {
 
 export interface IFriendRequest {
   id: number,
-  request_id: number,
-  username: string
+  username: string,
 }
 
 export const getErrorMessage = (error: unknown) => {
