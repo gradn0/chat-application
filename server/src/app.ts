@@ -5,7 +5,7 @@ import userRouter from "./routes/user";
 import relationshipRouter from "./routes/relationship";
 import { Server } from "socket.io";
 import { createServer } from "http";
-import handleSockets from "./routes/socket";
+import handleSockets from "./controllers/socket";
 
 const app = express();
 const port = process.env.PORT;

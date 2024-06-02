@@ -1,9 +1,10 @@
 import { IRelationship } from "../common"
+import socket from "../socket";
 import { MessageIcon } from "./Icons"
 
 const ContactCard = ({contact, selected}: {contact: IRelationship, selected:boolean}) => {
   const createRoom = () => {
-
+    socket.emit("create-room", {name: `dm-${contact.request_id}/${contact.reciever_id}`, ids: [contact.reciever_id, contact.request_id]});
   }
   return (
     <div className={`flex items-center gap-4 p-2 rounded-md ${selected ? "bg-accent bg-opacity-60" : ""}`}>

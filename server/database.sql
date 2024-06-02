@@ -32,5 +32,13 @@ CREATE TABLE relationships(
   reciever_id INT NOT NULL,
   status rel_status NOT NULL,
   CONSTRAINT fk_request_id FOREIGN KEY(request_id) REFERENCES users (id),
-  CONSTRAINT fk_reciever_id FOREIGN KEY(reciever_id) REFERENCES rooms (id)
+  CONSTRAINT fk_reciever_id FOREIGN KEY(reciever_id) REFERENCES users (id)
+);
+
+CREATE TABLE room_members(
+  user_id INT NOT NULL,
+  room_id INT NOT NULL,
+  joined_at TIMESTAMPTZ NOT NULL default current_timestamp,
+  CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users (id),
+  CONSTRAINT fk_room_id FOREIGN KEY(room_id) REFERENCES rooms (id)
 );
