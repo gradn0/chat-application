@@ -4,3 +4,10 @@ export const getErrorMessage = (error: unknown) => {
 }
 
 export type TStatus = "pending" | "approved";
+
+export interface IRelationship {
+  id: string;
+  request_id: number;
+  reciever_id: number;
+  status: TStatus;
+}

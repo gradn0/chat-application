@@ -17,7 +17,7 @@ const ContactList = ({contacts}: {contacts: IRelationship[]}) => {
     setText("");
     await postFriendRequest(`relationship/${text}`);
   }
-
+  
   useEffect(() => {
     queryClient.fetchQuery({queryKey: ["getContacts"]});
   }, [])

@@ -1,4 +1,4 @@
-import { TStatus, getErrorMessage } from "../common";
+import { IRelationship, TStatus, getErrorMessage } from "../common";
 import db from "../db";
 import { Response } from "express";
 
@@ -27,11 +27,13 @@ export const createRelationship = async (req: any, res: Response) => {
 export const getRelationship = async (req: any, res: Response, status: TStatus) => {
   const {id} = req.user;
   try {
-    const requests = (await db.query(
-      "SELECT relationships.id, users.username, relationships.request_id, relationships.reciever_id FROM users LEFT JOIN relationships on users.id = relationships.request_id WHERE (reciever_id = $1 OR request_id = $1) AND status = $2", 
+    const relationships: IRelationship[] = (await db.query(
+      "SELECT relationships.*, users.username FROM relationships INNER JOIN users\
+      ON (relationships.request_id = users.id AND relationships.request_id != $1) OR (relationships.reciever_id = users.id AND relationships.reciever_id != $1)\
+      WHERE (request_id = $1 OR reciever_id = $1) AND status = $2", 
       [id, status])).rows;
     
-    res.status(200).json(requests);
+    res.status(200).json(relationships);
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
   }
