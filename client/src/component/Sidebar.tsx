@@ -5,15 +5,20 @@ import ContactList from "./ContactList";
 import FriendRequests from "./FriendRequests";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFromAPI } from "../helpers";
+import { useAuthContext } from "../context/authContext";
 
 type TTab = "contacts" | "chats" | "requests";
 
 const Sidebar = () => {
   const [tab, setTab] = useState<TTab>("chats");
+  const {state} = useAuthContext();
   
   const {data: requests} = useQuery({
     queryKey: ["getRequests"],
-    queryFn: async () => await fetchFromAPI("relationship/requests", "GET")
+    queryFn: async () => {
+      const data = await fetchFromAPI("relationship/requests", "GET");
+      return data.filter((item: any) => item.reciever_id == state.user?.id)
+    }
   })
 
   const {data: contacts} = useQuery({

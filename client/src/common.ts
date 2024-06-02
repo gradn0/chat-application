@@ -1,5 +1,5 @@
 export interface IChat {
-  id: number,
+  id: number;
   title: string;
   unread: number;
   icon_url: string;
@@ -7,8 +7,10 @@ export interface IChat {
 }
 
 export interface IRelationship {
-  id: number,
-  username: string,
+  id: number;
+  username: string;
+  request_id: number;
+  reciever_id: number;
 }
 
 export const getErrorMessage = (error: unknown) => {

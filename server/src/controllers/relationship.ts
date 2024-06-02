@@ -28,7 +28,7 @@ export const getRelationship = async (req: any, res: Response, status: TStatus) 
   const {id} = req.user;
   try {
     const requests = (await db.query(
-      "SELECT relationships.id, users.username FROM users LEFT JOIN relationships on users.id = relationships.request_id WHERE reciever_id = $1 AND status = $2", 
+      "SELECT relationships.id, users.username, relationships.request_id, relationships.reciever_id FROM users LEFT JOIN relationships on users.id = relationships.request_id WHERE (reciever_id = $1 OR request_id = $1) AND status = $2", 
       [id, status])).rows;
     
     res.status(200).json(requests);
