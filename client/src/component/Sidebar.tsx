@@ -6,6 +6,7 @@ import FriendRequests from "./FriendRequests";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFromAPI } from "../helpers";
 import { useAuthContext } from "../context/authContext";
+import { IChat } from "../common";
 
 type TTab = "contacts" | "chats" | "requests";
 
@@ -26,6 +27,24 @@ const Sidebar = () => {
     queryFn: async () => await fetchFromAPI("relationship/friends", "GET")
   })
 
+  const {data: chats} = useQuery({
+    queryKey: ["getChats"],
+    queryFn: async () => {
+      const chats = await fetchFromAPI("chat", "GET");
+      
+      chats.forEach((chat: IChat) => {
+        const name = chat.name;
+        if (RegExp(/^dm-/).test(name)) {
+          const users = name.split("-")[1].split("/");
+          if (!state.user) return;
+          chat.name = state.user.username === users[0] ? users[1] : users[0];
+        }
+      });
+      
+      return chats
+    }
+  })
+
   return (
     <div className="bg-dark_accent size-full p-[2em] flex flex-col gap-[1em] rounded-r-xl">
       <div className="flex items-center">
@@ -40,7 +59,7 @@ const Sidebar = () => {
         </span>
       </div>
       <input className="searchBar p-3" type="text" placeholder="Search..."/>
-      {tab === "chats" && <ChatList />}
+      {tab === "chats" && <ChatList chats={chats}/>}
       {tab === "contacts" && <ContactList contacts={contacts}/>}
       {tab === "requests" && <FriendRequests requests={requests}/>}
     </div>

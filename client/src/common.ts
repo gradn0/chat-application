@@ -1,9 +1,8 @@
 export interface IChat {
   id: number;
-  title: string;
-  unread: number;
+  name: string;
   icon_url: string;
-  latest_message: string;
+  joined_at: string;
 }
 
 export interface IRelationship {
