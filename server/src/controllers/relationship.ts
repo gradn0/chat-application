@@ -1,6 +1,7 @@
 import { IRelationship, TStatus, getErrorMessage } from "../common";
 import db from "../db";
 import { Response } from "express";
+import { clients } from "./socket";
 
 export const createRelationship = async (req: any, res: Response) => {
   const username = req.params.username;
@@ -19,6 +20,8 @@ export const createRelationship = async (req: any, res: Response) => {
     } else {
       throw new Error("user does not exist");
     }
+
+    clients[reciever.id].emit("friend-request");
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
   }
@@ -44,7 +47,8 @@ export const editRelationship = async (req: any, res: Response) => {
   const {status}:{status: TStatus} = req.body;
 
   try {
-    await db.query("UPDATE relationships SET status = $1 WHERE id = $2", [status, id]);
+    const request_id = (await db.query("UPDATE relationships SET status = $1 WHERE id = $2 RETURNING request_id", [status, id])).rows[0].request_id;
+    if (status === "approved") clients[request_id].emit("request-accepted");
     res.status(200).json({id, status});
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
