@@ -1,7 +1,7 @@
 CREATE DATABASE photoshare;
 
 CREATE TABLE users(
-  id BIGSERIAL PRIMARY KEY NOT NULL,
+  id INT PRIMARY KEY NOT NULL,
   username VARCHAR(200) NOT NULL,
   email VARCHAR(200) NOT NULL, 
   password VARCHAR(200) NOT NULL,
@@ -9,13 +9,13 @@ CREATE TABLE users(
 );
 
 CREATE TABLE rooms(
-  id BIGSERIAL PRIMARY KEY NOT NULL, 
+  id INT PRIMARY KEY NOT NULL, 
   name VARCHAR(20) NOT NULL,
   icon_url VARCHAR(100)
 );
 
 CREATE TABLE messages(
-  id BIGSERIAL PRIMARY KEY NOT NULL,
+  id INT PRIMARY KEY NOT NULL,
   body VARCHAR(500) NOT NULL, 
   sender_id INT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL default current_timestamp,
@@ -27,7 +27,7 @@ CREATE TABLE messages(
 CREATE TYPE rel_status AS ENUM ('pending', 'approved');
 
 CREATE TABLE relationships(
-  id BIGSERIAL PRIMARY KEY NOT NULL, 
+  id INT PRIMARY KEY NOT NULL, 
   request_id INT NOT NULL,
   reciever_id INT NOT NULL,
   status rel_status NOT NULL,

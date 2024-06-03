@@ -9,12 +9,14 @@ import { useAuthContext } from "../context/authContext";
 import { IChat } from "../common";
 import socket from "../socket";
 import { queryClient } from "../main";
+import { useChatContext } from "../context/chatContext";
 
 type TTab = "contacts" | "chats" | "requests";
 
 const Sidebar = () => {
   const [tab, setTab] = useState<TTab>("chats");
   const {state} = useAuthContext();
+  const {setChats} = useChatContext();
   const [newContact, setNewContact] = useState(false);
   const [newRequest, setNewRequest] = useState(false);
   
@@ -22,7 +24,7 @@ const Sidebar = () => {
     queryKey: ["getRequests"],
     queryFn: async () => {
       const data = await fetchFromAPI("relationship/requests", "GET");
-      return data.filter((item: any) => item.reciever_id == state.user?.id)
+      return data.filter((item: any) => item.reciever_id === state.user?.id)
     }
   })
 
@@ -44,7 +46,8 @@ const Sidebar = () => {
           chat.name = state.user.username === users[0] ? users[1] : users[0];
         }
       });
-      
+
+      setChats(chats);
       return chats
     }
   })

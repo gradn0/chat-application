@@ -1,16 +1,28 @@
-const chat = { // temp
-  title: "Richard Hendrics",
-  icon_url: "https://gravatar.com/avatar/d410f9be84581256aa7a1d57640443fb?s=400&d=robohash&r=x",
-  unread: 2,
-  latest_message: "hello there"
-}
+import { useParams } from "react-router-dom"
+import { IChat } from "../common";
+import { useChatContext } from "../context/chatContext";
+import { useEffect, useState } from "react";
 
 const ChatPage = () => {
-  
+  const {chatId} = useParams();
+  const {chats} = useChatContext();
+  const [chat, setChat] = useState<IChat | null>(null);
+
+  useEffect(() => {
+    if (!chatId) return;
+    const selectedId = parseInt(chatId);
+    chats.forEach(chat => {
+      if (chat.id === selectedId) {
+        setChat(chat);
+        return;
+      }
+    })
+  }, [chatId])
+
   return (
     <div className="size-full bg-dark_white flex flex-col">
       <div className="bg-dark_white text-neutral-700 h-[10%] shadow-md text-xl sm:text-2xl flex items-center px-[2em] font-normal">
-        {chat.title}
+        {chat && chat.name}
       </div>
       <div className="flex-1">
 

@@ -2,14 +2,17 @@ import { useEffect } from "react";
 import { IChat } from "../common";
 import ChatCard from "./ChatCard"
 import { queryClient } from "../main";
+import { useNavigate } from "react-router-dom";
 
 const ChatList = ({chats}: {chats: IChat[]}) => {
+  const navigate = useNavigate();
   useEffect(() => {
-    queryClient.fetchQuery({queryKey: ["getChats"]});
+    queryClient.fetchQuery({queryKey: ["getChats"]}); // TODO: make socket event
   }, [])
+
   return (
     <div className="flex flex-col">
-      {chats && chats.map(chat => <ChatCard key={chat.id} chat={chat} selected={false}/>)}
+      {chats && chats.map(chat => <span key={chat.id} onClick={() => navigate(`/${chat.id}`)}><ChatCard chat={chat} selected={false}/></span>)}
     </div>
   )
 }
