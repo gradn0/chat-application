@@ -11,8 +11,7 @@ export const chatContext = createContext<ChatContext | null>(null);
 
 export const ChatContextProvider = ({children}: Props) => {
   const [chats, setChats] = useState<IChat[]>([]);
-  console.log(chats);
-  
+
   return (
     <chatContext.Provider value={{chats, setChats}}>
       {children}

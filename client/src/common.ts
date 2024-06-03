@@ -5,6 +5,14 @@ export interface IChat {
   joined_at: string;
 }
 
+export interface IMessage {
+  id: number;
+  body: string;
+  sender_id: number;
+  created_at: string;
+  room_id: number;
+}
+
 export interface IRelationship {
   id: number;
   username: string;
