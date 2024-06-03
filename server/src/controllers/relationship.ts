@@ -48,7 +48,10 @@ export const editRelationship = async (req: any, res: Response) => {
 
   try {
     const request_id = (await db.query("UPDATE relationships SET status = $1 WHERE id = $2 RETURNING request_id", [status, id])).rows[0].request_id;
-    if (status === "approved") clients[request_id].emit("request-accepted");
+    if (status === "approved"){
+      clients[request_id].emit("request-accepted");
+      clients[req.user.id].emit("request-accepted");
+    }
     res.status(200).json({id, status});
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
