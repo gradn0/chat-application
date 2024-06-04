@@ -30,3 +30,16 @@ export const createChat = async (req: any, res: Response) => {
     res.status(400).json({Error: getErrorMessage(error)});
   }
 }
+
+export const getMessages = async (req: any, res: Response) => {
+  const {length, earliest} = req.query;
+  const {roomId} = req.params;
+  try {
+    const messages = earliest
+      ? (await db.query(`SELECT * FROM messages WHERE room_id = $1 AND id < $2 ORDER BY id DESC LIMIT $3`, [roomId, earliest, length])).rows
+      : (await db.query(`SELECT * FROM messages WHERE room_id = $1 ORDER BY id DESC LIMIT $2`, [roomId, length])).rows
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(400).json({Error: getErrorMessage(error)});
+  }
+}

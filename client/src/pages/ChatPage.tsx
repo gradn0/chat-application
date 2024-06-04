@@ -1,30 +1,17 @@
 import { useParams } from "react-router-dom"
-import { IChat } from "../common";
+import { IChat, IMessage } from "../common";
 import { useChatContext } from "../context/chatContext";
 import { useEffect, useState } from "react";
 import MessagesList from "../component/MessagesList";
-
-const messages = [ // temp
-  {
-    id: 1,
-    body: "Hello",
-    sender_id: 30,
-    created_at: "2024-06-03 15:18:30.282378+01",
-    room_id: 11,
-  },
-  {
-    id: 2,
-    body: "hi there",
-    sender_id: 21,
-    created_at: "2024-06-03 15:19:05.388569+01",
-    room_id: 11,
-  }, 
-]
+import { useQuery } from "@tanstack/react-query";
+import { fetchFromAPI } from "../helpers";
 
 const ChatPage = () => {
   const {chatId} = useParams();
   const {chats} = useChatContext();
   const [chat, setChat] = useState<IChat | null>(null);
+  const [earliestId, setEarliestId] = useState<number | null>(null);
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
     if (!chatId) return;
@@ -36,6 +23,19 @@ const ChatPage = () => {
       }
     })
   }, [chatId])
+
+  const fetchMessages = async (chatId: string | undefined) => {
+    if (!chatId) return;
+    const data =  (await fetchFromAPI(`chat/${chatId}/messages/?length=7` + (earliestId ? `&earliest=${earliestId}` : ""), "GET")).reverse();
+    setEarliestId(data[0].id);
+    setMessages(current => [...data, ...current]);
+    return data;
+  } 
+
+  useQuery({
+    queryKey: ["getMessages", chatId],
+    queryFn:  () => fetchMessages(chatId)
+  })
 
   return (
     <div className="size-full bg-dark_white flex flex-col">
