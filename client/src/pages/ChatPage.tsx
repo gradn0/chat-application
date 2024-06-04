@@ -8,14 +8,17 @@ import { fetchFromAPI } from "../helpers";
 import { queryClient } from "../main";
 
 const ChatPage = () => {
-  const {chatId} = useParams();
+  const params = useParams();
   const {chats} = useChatContext();
   const [chat, setChat] = useState<IChat | null>(null);
   const [earliestId, setEarliestId] = useState<number | null>(null);
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [chatId, setChatId] = useState("");
 
   useEffect(() => {
+    const chatId = params.chatId;
     if (!chatId) return;
+    setChatId(chatId)
     const selectedId = parseInt(chatId);
     chats.forEach(chat => {
       if (chat.id === selectedId) {
@@ -23,15 +26,15 @@ const ChatPage = () => {
         return;
       }
     })
-
+    
     return () => {
       setMessages([]);
       setEarliestId(null);
     }
-  }, [chatId])
+  }, [params.chatId])
 
   useQuery({
-    queryKey: [`getMessages${chatId}`],
+    queryKey: ["getMessages", chatId],
     queryFn: async () => {
       if (!chatId) return;
       const data =  (await fetchFromAPI(`chat/${chatId}/messages/?length=7` + (earliestId ? `&earliest=${earliestId}` : ""), "GET")).reverse();
