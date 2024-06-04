@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 const ChatList = ({chats}: {chats: IChat[]}) => {
   const navigate = useNavigate();
   useEffect(() => {
-    queryClient.fetchQuery({queryKey: ["getChats"]}); // TODO: make socket event
-  }, [])
+    queryClient.invalidateQueries({queryKey: ["getChats"]}); // TODO: make socket event
+  }, [chats])
 
   return (
     <div className="flex flex-col">
