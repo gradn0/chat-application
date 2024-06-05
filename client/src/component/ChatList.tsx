@@ -12,7 +12,7 @@ const ChatList = ({chats}: {chats: IChat[] | undefined}) => {
 
   return (
     <div className="flex flex-col">
-      {chats && chats.map(chat => <span key={chat.id} onClick={() => {navigate(`/${chat.id}`)}}><ChatCard chat={chat} selected={false}/></span>)}
+      {chats && chats.map(chat => <span key={chat.id} onClick={() => navigate(`/${chat.id}`)}><ChatCard chat={chat} selected={false}/></span>)}
     </div>
   )
 }

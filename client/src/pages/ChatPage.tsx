@@ -59,7 +59,13 @@ const ChatPage = () => {
       if (!chatId) return;
       const data =  (await fetchFromAPI(`chat/${chatId}/messages/?length=7` + (earliestId ? `&earliest=${earliestId}` : ""), "GET")).reverse();
       setEarliestId(data[0].id);
-      setMessages(current => [...data, ...current]);
+
+      if (earliestId) {
+        setMessages(current => [...data, ...current]);
+      } else {
+        setMessages(data);
+      }
+      
       return data;
     }
   })
