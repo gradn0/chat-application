@@ -1,6 +1,7 @@
 import { getErrorMessage } from "../common";
 import db from "../db";
 import { Response } from "express";
+import { clients } from "./socket";
 
 export const getChats = async (req: any, res: Response) => {
   const {id} = req.user;
@@ -17,14 +18,14 @@ export const createChat = async (req: any, res: Response) => {
   try {
     const existingRoom = (await db.query("SELECT * FROM rooms WHERE name = $1 OR name = $2", [`dm-${usernames[0]}/${usernames[1]}`, `dm-${usernames[1]}/${usernames[0]}`])).rows[0];
     if (existingRoom) throw new Error("Room already exists");
-    if (!ids[0]) throw new Error("At least one id is required");
+    if (!ids[0] || !ids[1]) throw new Error("Two ids are required to create a chat");
 
     const roomId = (await db.query("INSERT INTO rooms (name) VALUES ($1) RETURNING id", [`dm-${usernames[0]}/${usernames[1]}`])).rows[0].id;
-    if (ids[1]) {
-      await db.query("INSERT INTO room_members (room_id, user_id) VALUES ($1, $2), ($1, $3)", [roomId, ids[0], ids[1]]);
-    } else {
-      await db.query("INSERT INTO room_members (room_id, user_id) VALUES ($1, $2)", [roomId, ids[0]]);
-    }
+    await db.query("INSERT INTO room_members (room_id, user_id) VALUES ($1, $2), ($1, $3)", [roomId, ids[0], ids[1]]);
+
+    clients[ids[0]].emit("new-chat", {roomId});
+    clients[ids[1]].emit("new-chat", {roomId});
+
     res.status(200);
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});

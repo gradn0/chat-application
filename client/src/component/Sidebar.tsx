@@ -18,6 +18,7 @@ const Sidebar = () => {
   const [tab, setTab] = useState<TTab>("chats");
   const {state} = useAuthContext();
   const {setChats} = useChatContext();
+  const [newChat, setNewChat] = useState(false);
   const [newContact, setNewContact] = useState(false);
   const [newRequest, setNewRequest] = useState(false);
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Sidebar = () => {
   const {data: chats} = useQuery({
     queryKey: ["getChats"],
     queryFn: async () => {
-      const chats = await fetchFromAPI("chat", "GET");
+      const chats: IChat[] = await fetchFromAPI("chat", "GET");
       
       chats.forEach((chat: IChat) => {
         const name = chat.name;
@@ -67,6 +68,10 @@ const Sidebar = () => {
       queryClient.fetchQuery({queryKey: ["getChats"]});
       navigate("/");
     });
+    socket.on("new-chat", () => {
+      queryClient.fetchQuery({queryKey: ["getChats"]});
+      setNewChat(true);
+    });
   })
 
   return (
@@ -76,7 +81,10 @@ const Sidebar = () => {
       </div>
       <div className="flex gap-[3em]">
 
-        <span className="hover:bg-accent p-2 rounded-full cursor-pointer" onClick={() => setTab("chats")}><ChatIcon color="white"/></span>
+        <span className="hover:bg-accent p-2 rounded-full cursor-pointer relative" onClick={() => {setTab("chats"); setNewChat(false)}}>
+          <ChatIcon color="white"/>
+          {newChat && <span className="absolute rounded-full size-2 bg-green-400 bottom-0 right-0"></span>}
+        </span>
 
         <span className="hover:bg-accent p-2 rounded-full cursor-pointer relative" onClick={() => {setTab("contacts"); setNewContact(false)}}>
           <ContactsIcon color="white"/>
