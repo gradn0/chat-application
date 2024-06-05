@@ -32,6 +32,10 @@ button {
   @apply bg-teal-500 text-off_white bg-opacity-60 focus:outline-none placeholder:text-neutral-200;
 }
 
+.avatar {
+ @apply size-[2.5em] lg:size-[3em] bg-white rounded-full;
+}
+
 /* Typography */
 .text-heading {
   @apply text-2xl sm:text-3xl;

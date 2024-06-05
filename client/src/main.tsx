@@ -9,6 +9,7 @@ import { AuthContextProvider } from './context/authContext.tsx'
 import ProtectedComponent from './component/ProtectedComponent.tsx'
 import ChatPage from './pages/ChatPage.tsx'
 import { ChatContextProvider } from './context/chatContext.tsx'
+import { AppContextProvider } from './context/appContext.tsx'
 
 const router = createBrowserRouter([
   {
@@ -39,11 +40,13 @@ export const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   //<React.StrictMode>
     <AuthContextProvider>
-      <ChatContextProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router}/>
-        </QueryClientProvider>
-      </ChatContextProvider>
+      <AppContextProvider>
+        <ChatContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router}/>
+          </QueryClientProvider>
+        </ChatContextProvider>
+      </AppContextProvider>
     </AuthContextProvider>
   //</React.StrictMode>,
 )

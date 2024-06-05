@@ -12,7 +12,10 @@ export default {
         grey: "#e2e2e2",
         accent: "#14b8a6",
         dark_accent: "#0f766e",
-      }
+      },
+      screens: {
+        "desktop": "880px"
+      },
     },
   },
   plugins: [],

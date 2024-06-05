@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import ChatList from "./ChatList"
-import { BellIcon, ChatIcon, ContactsIcon } from "./Icons"
+import { BellIcon, ChatIcon, ChevronLeftIcon, ContactsIcon } from "./Icons"
 import ContactList from "./ContactList";
 import FriendRequests from "./FriendRequests";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import socket from "../socket";
 import { queryClient } from "../main";
 import { useChatContext } from "../context/chatContext";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/appContext";
 
 type TTab = "contacts" | "chats" | "requests";
 
@@ -22,6 +23,7 @@ const Sidebar = () => {
   const [newContact, setNewContact] = useState(false);
   const [newRequest, setNewRequest] = useState(false);
   const navigate = useNavigate();
+  const {setSidebarOpen} = useAppContext();
   
   const {data: requests} = useQuery({
     queryKey: ["getRequests"],
@@ -76,8 +78,9 @@ const Sidebar = () => {
 
   return (
     <div className="bg-dark_accent size-full p-[2em] flex flex-col gap-[1em] rounded-r-xl">
-      <div className="flex items-center">
-        <h2 className="text-heading font-bold text-off_white mb-[1em]">PhotoShare</h2>
+      <div className="flex items-center mb-[1em]">
+        <h2 className="text-heading font-bold text-off_white">PhotoShare</h2>
+        <span className="cursor-pointer ml-auto" onClick={() => setSidebarOpen(false)}><ChevronLeftIcon color="white" /></span>
       </div>
       <div className="flex gap-[3em]">
 
