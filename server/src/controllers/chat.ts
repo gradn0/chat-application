@@ -31,6 +31,19 @@ export const createChat = async (req: any, res: Response) => {
   }
 }
 
+export const deleteChat = async (req: any, res: Response) => {
+  const {id} = req.params;
+  try {
+    await db.query("DELETE FROM room_members WHERE room_id = $1", [id]);
+    await db.query("DELETE FROM messages WHERE room_id = $1", [id]);
+    await db.query("DELETE FROM rooms WHERE id = $1", [id]);
+    res.status(200);
+  } catch (error) {
+    res.status(400).json({Error: getErrorMessage(error)});
+  }
+}
+
+
 export const getMessages = async (req: any, res: Response) => {
   const {length, earliest} = req.query;
   const {roomId} = req.params;

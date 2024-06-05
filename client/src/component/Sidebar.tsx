@@ -10,6 +10,7 @@ import { IChat } from "../common";
 import socket from "../socket";
 import { queryClient } from "../main";
 import { useChatContext } from "../context/chatContext";
+import { useNavigate } from "react-router-dom";
 
 type TTab = "contacts" | "chats" | "requests";
 
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const {setChats} = useChatContext();
   const [newContact, setNewContact] = useState(false);
   const [newRequest, setNewRequest] = useState(false);
+  const navigate = useNavigate();
   
   const {data: requests} = useQuery({
     queryKey: ["getRequests"],
@@ -60,6 +62,10 @@ const Sidebar = () => {
     socket.on("friend-request", () => {
       setNewRequest(true);
       queryClient.fetchQuery({queryKey: ["getRequests"]});
+    });
+    socket.on("delete-chat", () => {
+      queryClient.fetchQuery({queryKey: ["getChats"]});
+      navigate("/");
     });
   })
 
