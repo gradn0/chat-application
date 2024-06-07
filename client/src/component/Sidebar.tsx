@@ -45,13 +45,6 @@ const Sidebar = () => {
       const chats: IChat[] = await fetchFromAPI("chat", "GET");
       
       chats.forEach((chat: IChat) => {
-        const name = chat.name;
-        if (RegExp(/^dm-/).test(name)) {
-          const users = name.split("-")[1].split("/");
-          if (!state.user) return;
-          chat.name = state.user.username === users[0] ? users[1] : users[0];
-        }
-
         if (chat.unseen_messages) {
           if (params.chatId && parseInt(params.chatId) === chat.id) {
             chat.unseen_messages = false;
@@ -60,6 +53,7 @@ const Sidebar = () => {
           }
         }
       });
+      
       setChats(chats);
       return chats
     }

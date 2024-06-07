@@ -20,7 +20,7 @@ const ChatCard = ({chat, selected}: {chat: IChat, selected: boolean}) => {
       <img className="avatar" src="https://gravatar.com/avatar/d410f9be84581256aa7a1d57640443fb?s=400&d=robohash&r=x" alt="chat avatar" />
       {chat.unseen_messages && <span className="absolute rounded-full size-2 bg-green-400 top-[0.5em] left-[0.2em]"></span>}
       <div className="text-off_white">
-        <h3 className="font-semibold">{chat.name}</h3>
+        <h3 className="font-semibold">{chat.room_name}</h3>
       </div>
       <span 
         className="hover:bg-accent p-2 rounded-full cursor-pointer relative ml-auto"

@@ -7,7 +7,7 @@ export const getChats = async (req: any, res: Response) => {
   const {id} = req.user;
   try {
     const chats = (await db.query("\
-      SELECT rooms.*, room_members.joined_at, room_members.unseen_messages FROM room_members\
+      SELECT rooms.*, room_members.joined_at, room_members.unseen_messages, room_members.room_name FROM room_members\
       INNER JOIN rooms ON room_members.room_id = rooms.id\
       WHERE room_members.user_id = $1", [id])).rows;
     res.status(200).json(chats);
@@ -17,19 +17,18 @@ export const getChats = async (req: any, res: Response) => {
 }
 
 export const createChat = async (req: any, res: Response) => {
-  const {usernames, ids} = req.body;
+  const {creator, recipient} = req.body;
+  const creatorRoomName = recipient.username;
+  const recipientRoomName = creator.username;
   try {
-    const existingRoom = (await db.query("SELECT * FROM rooms WHERE name = $1 OR name = $2", [`dm-${usernames[0]}/${usernames[1]}`, `dm-${usernames[1]}/${usernames[0]}`])).rows[0];
+    const existingRoom = (await db.query("SELECT * FROM room_members WHERE user_id = $1 AND room_name = $2", [creator.id, recipient.username])).rows[0]
     if (existingRoom) throw new Error("Room already exists");
-    if (!ids[0] || !ids[1]) throw new Error("Two ids are required to create a chat");
 
-    const roomId = (await db.query("INSERT INTO rooms (name) VALUES ($1) RETURNING id", [`dm-${usernames[0]}/${usernames[1]}`])).rows[0].id;
-    await db.query("INSERT INTO room_members (room_id, user_id) VALUES ($1, $2), ($1, $3)", [roomId, ids[0], ids[1]]);
+    const roomId = (await db.query("INSERT INTO rooms DEFAULT VALUES RETURNING id")).rows[0].id;
+    await db.query("INSERT INTO room_members (room_id, user_id, room_name) VALUES ($1, $2, $3), ($1, $4, $5)", [roomId, creator.id, recipient.username, recipient.id, creator.username]);
 
-    clients[ids[0]].emit("new-chat", {roomId});
-    clients[ids[1]].emit("new-chat", {roomId});
-
-    res.status(200);
+    clients[creator.id]?.emit("new-chat", {roomId});
+    clients[recipient.id]?.emit("new-chat", {roomId});
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
   }

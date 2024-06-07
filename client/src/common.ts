@@ -1,9 +1,9 @@
 export interface IChat {
   id: number;
-  name: string;
   icon_url: string;
   joined_at: string;
   unseen_messages: boolean;
+  room_name: string;
 }
 
 export interface IMessage {
