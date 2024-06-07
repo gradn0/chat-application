@@ -6,7 +6,10 @@ import { clients } from "./socket";
 export const getChats = async (req: any, res: Response) => {
   const {id} = req.user;
   try {
-    const chats = (await db.query("SELECT rooms.*, room_members.joined_at FROM room_members INNER JOIN rooms ON room_members.room_id = rooms.id WHERE room_members.user_id = $1", [id])).rows;
+    const chats = (await db.query("\
+      SELECT rooms.*, room_members.joined_at, room_members.unseen_messages FROM room_members\
+      INNER JOIN rooms ON room_members.room_id = rooms.id\
+      WHERE room_members.user_id = $1", [id])).rows;
     res.status(200).json(chats);
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});

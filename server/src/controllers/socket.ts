@@ -9,10 +9,22 @@ const handleSockets = (socket: Socket) => {
   socket.on("new-message", async ({sender_id, roomId, body}) => {
     try {
       const message = (await db.query("INSERT INTO messages (body, sender_id, room_id) VALUES ($1, $2, $3) RETURNING *", [body, sender_id, roomId])).rows[0];
-      const members = (await db.query("SELECT user_id FROM room_members WHERE room_id = $1", [roomId])).rows;
-      members.forEach(member => {
-        clients[member.user_id].emit("new-message", message);
+      const recieverIds = (await db.query("SELECT user_id FROM room_members WHERE room_id = $1", [roomId])).rows
+                  .map(member => member.user_id)
+                  .filter(id => id !== sender_id);
+      await db.query("UPDATE room_members SET unseen_messages = TRUE WHERE user_id = ANY($1::int[])", [recieverIds]);         
+      clients[sender_id].emit("new-message", message);   
+      recieverIds.forEach(id => {
+        clients[id]?.emit("new-message", message);
       })
+    } catch (error) {
+      console.log(error);
+    }
+  })
+
+  socket.on("chat-seen", async ({userId, chatId}) => {
+    try {
+      (await db.query("UPDATE room_members SET unseen_messages = FALSE WHERE user_id = $1 AND room_id = $2", [userId, chatId]));
     } catch (error) {
       console.log(error);
     }
@@ -22,7 +34,7 @@ const handleSockets = (socket: Socket) => {
     try {
       const members = (await db.query("SELECT user_id FROM room_members WHERE room_id = $1", [roomId])).rows;
       members.forEach(member => {
-        clients[member.user_id].emit("delete-chat");
+        clients[member.user_id]?.emit("delete-chat");
       })
     } catch (error) {
       console.log(error);

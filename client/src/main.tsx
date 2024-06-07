@@ -38,7 +38,7 @@ const router = createBrowserRouter([
 export const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  //<React.StrictMode>
+  //<StrictMode>
     <AuthContextProvider>
       <AppContextProvider>
         <ChatContextProvider>
@@ -48,5 +48,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </ChatContextProvider>
       </AppContextProvider>
     </AuthContextProvider>
-  //</React.StrictMode>,
+  //</StrictMode>,
 )

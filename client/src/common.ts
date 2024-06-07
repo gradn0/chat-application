@@ -3,6 +3,7 @@ export interface IChat {
   name: string;
   icon_url: string;
   joined_at: string;
+  unseen_messages: boolean;
 }
 
 export interface IMessage {

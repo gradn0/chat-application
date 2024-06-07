@@ -10,7 +10,7 @@ import { IChat } from "../common";
 import socket from "../socket";
 import { queryClient } from "../main";
 import { useChatContext } from "../context/chatContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
 
 type TTab = "contacts" | "chats" | "requests";
@@ -24,6 +24,7 @@ const Sidebar = () => {
   const [newRequest, setNewRequest] = useState(false);
   const navigate = useNavigate();
   const {setSidebarOpen} = useAppContext();
+  const params = useParams();
   
   const {data: requests} = useQuery({
     queryKey: ["getRequests"],
@@ -50,11 +51,28 @@ const Sidebar = () => {
           if (!state.user) return;
           chat.name = state.user.username === users[0] ? users[1] : users[0];
         }
-      });
 
+        if (chat.unseen_messages) {
+          if (params.chatId && parseInt(params.chatId) === chat.id) {
+            chat.unseen_messages = false;
+          } else {
+            setNewChat(true);
+          }
+        }
+      });
       setChats(chats);
       return chats
     }
+  })
+
+  useEffect(() => {
+    if (!chats || tab !== "chats") return;
+    for (let i = 0; i<chats.length; i++) {
+      if (chats[i].unseen_messages) {
+        return;
+      }
+    }
+    setNewChat(false);
   })
 
   useEffect(() => {
@@ -74,6 +92,9 @@ const Sidebar = () => {
       queryClient.fetchQuery({queryKey: ["getChats"]});
       setNewChat(true);
     });
+    socket.on("new-message", () => {
+      queryClient.fetchQuery({queryKey: ["getChats"]});
+    });
   })
 
   return (
@@ -84,19 +105,19 @@ const Sidebar = () => {
       </div>
       <div className="flex gap-[3em]">
 
-        <span className="hover:bg-accent p-2 rounded-full cursor-pointer relative" onClick={() => {setTab("chats"); setNewChat(false)}}>
+        <span className="hover:bg-accent p-2 rounded-full cursor-pointer relative" onClick={() => setTab("chats")}>
           <ChatIcon color="white"/>
-          {newChat && <span className="absolute rounded-full size-2 bg-green-400 bottom-0 right-0"></span>}
+          {newChat && tab !== "chats" && <span className="absolute rounded-full size-2 bg-green-400 bottom-0 right-0"></span>}
         </span>
 
         <span className="hover:bg-accent p-2 rounded-full cursor-pointer relative" onClick={() => {setTab("contacts"); setNewContact(false)}}>
           <ContactsIcon color="white"/>
-          {newContact && <span className="absolute rounded-full size-2 bg-green-400 bottom-0 right-0"></span>}
+          {newContact && tab !== "contacts" && <span className="absolute rounded-full size-2 bg-green-400 bottom-0 right-0"></span>}
         </span>
 
         <span className="hover:bg-accent p-2 rounded-full cursor-pointer relative" onClick={() => {setTab("requests"); setNewRequest(false)}}>
           <BellIcon color="white"/>
-          {newRequest && <span className="absolute rounded-full size-2 bg-green-400 bottom-0 right-0"></span>}
+          {newRequest && tab !== "requests" && <span className="absolute rounded-full size-2 bg-green-400 bottom-0 right-0"></span>}
         </span>
 
       </div>

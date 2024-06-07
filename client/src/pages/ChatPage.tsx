@@ -36,6 +36,7 @@ const ChatPage = () => {
     socket.on("new-message", (message: IMessage) => {
       if (parseInt(chatId) === message.room_id) {
         setMessages(current => [...current, message]);
+        socket.emit("chat-seen", {userId: state.user?.id, chatId: chatId});
       }
     });
     
