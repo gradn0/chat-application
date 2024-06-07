@@ -60,6 +60,9 @@ const Sidebar = () => {
   })
 
   useEffect(() => {
+    if(tab === "contacts") setNewContact(false);
+    if(tab === "requests") setNewRequest(false);
+
     if (!chats || tab !== "chats") return;
     for (let i = 0; i<chats.length; i++) {
       if (chats[i].unseen_messages) {
