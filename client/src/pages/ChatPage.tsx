@@ -35,7 +35,7 @@ const ChatPage = () => {
         return;
       }
     })
-  }, [chats])
+  }, [chats, params])
 
   useEffect(() => {
     socket.on("new-message", (message: IMessage) => {
