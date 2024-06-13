@@ -25,10 +25,18 @@ const AddContactModal = ({closeModal, chat}: {closeModal: () => void, chat: ICha
   }
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-off_white p-10 border-[1px] border-grey rounded-lg shadow w-[90%] xs:w-[16em]">
+    <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-off_white p-10 border-[1px] border-grey rounded-lg shadow w-[90%] xs:w-[18em]">
+      <h2 className="text-subheading font-semibold mb-5">Add Member</h2>
       <p className="absolute top-0 right-0 pr-2 text-heading text-gray-400 cursor-pointer" onClick={closeModal}>×</p>
-      <input className="p-2 text-small focus:outline-none" value={roomName} type="text" placeholder="Group name..." onChange={(e) => setRoomName(e.target.value)}/>
-      {contacts.map(contact => <div className="cursor-pointer bg-black" key={contact.id} onClick={() => addContactToGroup(contact)}><ContactCard key={contact.id} contact={contact} selected={false}/></div>)}
+      <input className="p-2 text-small focus:outline-none mb-4" value={roomName} type="text" placeholder="Room name..." onChange={(e) => setRoomName(e.target.value)}/>
+      <ul className="space-y-2">
+        {contacts.map(contact => 
+          <div className="cursor-pointer text-neutral-700 hover:bg-white" key={contact.id} onClick={() => addContactToGroup(contact)}>
+            <ContactCard key={contact.id} contact={contact} selected={false}/>
+          </div>
+        )}
+      </ul>
+      
     </div>
   )
 }

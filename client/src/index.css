@@ -15,7 +15,6 @@
 /* Tags */
 body {
   @apply bg-off_white;
-  @apply text-sm sm:text-base;
 }
 
 button {
@@ -41,6 +40,10 @@ button {
   @apply text-2xl sm:text-3xl;
 }
 
+.text-subheading {
+  @apply text-xl;
+}
+
 .text-small {
   @apply text-xs sm:text-sm;
 }
@@ -49,4 +52,5 @@ button {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  @apply text-sm sm:text-base;
 }
