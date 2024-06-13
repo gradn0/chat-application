@@ -1,9 +1,11 @@
 import { Dispatch, PropsWithChildren, SetStateAction, createContext, useContext, useState } from "react"
-import { IChat } from "../common";
+import { IChat, IRelationship } from "../common";
 
 interface ChatContext {
   chats: IChat[];
-  setChats: Dispatch<SetStateAction<IChat[]>>
+  setChats: Dispatch<SetStateAction<IChat[]>>;
+  contacts: IRelationship[];
+  setContacts: Dispatch<SetStateAction<IRelationship[]>>;
 }
 type Props = PropsWithChildren;
 
@@ -11,9 +13,10 @@ export const chatContext = createContext<ChatContext | null>(null);
 
 export const ChatContextProvider = ({children}: Props) => {
   const [chats, setChats] = useState<IChat[]>([]);
+  const [contacts, setContacts] = useState<IRelationship[]>([]);
 
   return (
-    <chatContext.Provider value={{chats, setChats}}>
+    <chatContext.Provider value={{chats, setChats, contacts, setContacts}}>
       {children}
     </chatContext.Provider>
   )

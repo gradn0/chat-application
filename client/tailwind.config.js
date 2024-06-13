@@ -14,6 +14,7 @@ export default {
         dark_accent: "#0f766e",
       },
       screens: {
+        xs: "374px",
         "desktop": "880px"
       },
     },

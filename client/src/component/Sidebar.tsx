@@ -18,7 +18,7 @@ type TTab = "contacts" | "chats" | "requests";
 const Sidebar = () => {
   const [tab, setTab] = useState<TTab>("chats");
   const {state} = useAuthContext();
-  const {setChats} = useChatContext();
+  const {setChats, setContacts} = useChatContext();
   const [newChat, setNewChat] = useState(false);
   const [newContact, setNewContact] = useState(false);
   const [newRequest, setNewRequest] = useState(false);
@@ -36,7 +36,11 @@ const Sidebar = () => {
 
   const {data: contacts} = useQuery({
     queryKey: ["getContacts"],
-    queryFn: async () => await fetchFromAPI("relationship/friends", "GET")
+    queryFn: async () => {
+      const contacts = await fetchFromAPI("relationship/friends", "GET");
+      setContacts(contacts);
+      return contacts;
+    }
   })
 
   const {data: chats} = useQuery({
@@ -53,7 +57,6 @@ const Sidebar = () => {
           }
         }
       });
-      
       setChats(chats);
       return chats
     }

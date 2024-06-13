@@ -8,11 +8,14 @@ import { fetchFromAPI } from "../helpers";
 import { queryClient } from "../main";
 import socket from "../socket";
 import { useAuthContext } from "../context/authContext";
+import ChatPageHeader from "../component/ChatPageHeader";
 
 const ChatPage = () => {
   const params = useParams();
+
   const {state} = useAuthContext();
   const {chats} = useChatContext();
+
   const [chat, setChat] = useState<IChat | null>(null);
   const [earliestId, setEarliestId] = useState<number | null>(null);
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -22,18 +25,21 @@ const ChatPage = () => {
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const chatId = params.chatId;
-    if (!chatId) return;
+    if (!params.chatId) return;
     setChatId(chatId)
-    const selectedId = parseInt(chatId);
+    const selectedId = parseInt(params.chatId);
+
     chats.forEach(chat => {
       if (chat.id === selectedId) {
         setChat(chat);
         return;
       }
     })
+  }, [chats])
 
+  useEffect(() => {
     socket.on("new-message", (message: IMessage) => {
+      if (!chatId) return;
       if (parseInt(chatId) === message.room_id) {
         setMessages(current => [...current, message]);
         socket.emit("chat-seen", {userId: state.user?.id, chatId: chatId});
@@ -44,7 +50,7 @@ const ChatPage = () => {
       setMessages([]);
       setEarliestId(null);
     }
-  }, [params.chatId])
+  }, [])
 
   useEffect(() => {
     if (lastMessageRef.current) {
@@ -79,11 +85,9 @@ const ChatPage = () => {
   }
   
   return (
-    <div className="size-full bg-dark_white flex flex-col">
-      <div className="bg-dark_white text-neutral-700 h-[10%] shadow-md text-xl sm:text-2xl flex items-center px-[2em] font-normal">
-        {chat && chat.name}
-      </div>
-
+    <div className="size-full bg-dark_white flex flex-col relative">
+      {chat && <ChatPageHeader chat={chat}/>}
+      
       <div className="flex flex-col flex-1 overflow-y-scroll">
         <p 
           className="mx-auto size-min text-nowrap cursor-pointer bg-grey p-2 m-2 text-small text-neutral-500" 

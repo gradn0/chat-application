@@ -46,6 +46,26 @@ export const deleteChat = async (req: any, res: Response) => {
   }
 }
 
+export const addMember = async (req: any, res: Response) => {
+  const {id} = req.params;
+  const {roomId, roomName} = req.body;
+  try {
+    const existingMember = (await db.query("SELECT * FROM room_members WHERE user_id = $1 AND room_name = $2", [id, roomId])).rows[0]
+    if (existingMember) throw new Error("User is already a member of this room");
+
+    await db.query("INSERT INTO room_members (user_id, room_id, room_name) VALUES ($1, $2, $3)", [id, roomId, roomName]);
+    await db.query("UPDATE room_members SET room_name = $1 WHERE room_id = $2", [roomName, roomId]);
+    
+    const recieverIds = (await db.query("SELECT user_id FROM room_members WHERE room_id = $1", [roomId])).rows.map(member => member.user_id);
+    recieverIds.forEach(id => {
+      clients[id]?.emit("new-chat", {roomId});
+    })
+
+    res.status(200);
+  } catch (error) {
+    res.status(400).json({Error: getErrorMessage(error)});
+  }
+}
 
 export const getMessages = async (req: any, res: Response) => {
   const {length, earliest} = req.query;
