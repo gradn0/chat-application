@@ -10,7 +10,7 @@ import { IChat } from "../common";
 import socket from "../socket";
 import { queryClient } from "../main";
 import { useChatContext } from "../context/chatContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
 
 type TTab = "contacts" | "chats" | "requests";
@@ -18,13 +18,13 @@ type TTab = "contacts" | "chats" | "requests";
 const Sidebar = () => {
   const [tab, setTab] = useState<TTab>("chats");
   const {state} = useAuthContext();
-  const {setChats, setContacts} = useChatContext();
+  const {setSidebarOpen} = useAppContext();
+  const {currentChat, setCurrentChat, setChats, setContacts} = useChatContext();
   const [newChat, setNewChat] = useState(false);
   const [newContact, setNewContact] = useState(false);
   const [newRequest, setNewRequest] = useState(false);
   const navigate = useNavigate();
-  const {setSidebarOpen} = useAppContext();
-  const params = useParams();
+  
   
   const {data: requests} = useQuery({
     queryKey: ["getRequests"],
@@ -47,10 +47,11 @@ const Sidebar = () => {
     queryKey: ["getChats"],
     queryFn: async () => {
       const chats: IChat[] = await fetchFromAPI("chat", "GET");
-      
+
       chats.forEach((chat: IChat) => {
+        if (currentChat?.id === chat.id && currentChat.room_name !== chat.room_name) setCurrentChat(chat);
         if (chat.unseen_messages) {
-          if (params.chatId && parseInt(params.chatId) === chat.id) {
+          if (currentChat?.id === chat.id) {
             chat.unseen_messages = false;
           } else {
             setNewChat(true);
