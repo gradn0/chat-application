@@ -31,7 +31,7 @@ export const getRelationship = async (req: any, res: Response, status: TStatus) 
   const {id} = req.user;
   try {
     const relationships: IRelationship[] = (await db.query(
-      "SELECT relationships.*, users.username FROM relationships INNER JOIN users\
+      "SELECT relationships.*, users.username, users.icon_url FROM relationships INNER JOIN users\
       ON (relationships.request_id = users.id AND relationships.request_id != $1) OR (relationships.reciever_id = users.id AND relationships.reciever_id != $1)\
       WHERE (request_id = $1 OR reciever_id = $1) AND status = $2", 
       [id, status])).rows;

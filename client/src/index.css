@@ -32,7 +32,7 @@ button {
 }
 
 .avatar {
- @apply size-[2.5em] lg:size-[3em] bg-white rounded-full;
+ @apply size-[2.5em] lg:size-[3em] rounded-full;
 }
 
 /* Typography */

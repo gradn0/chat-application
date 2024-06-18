@@ -26,7 +26,7 @@ const FriendRequestCard = ({request}: {request: IRelationship}) => {
 
   return (
     <div className={`flex items-center gap-4 p-2 rounded-md cursor-pointer`}>
-    <img className="avatar" src="https://gravatar.com/avatar/d410f9be84581256aa7a1d57640443fb?s=400&d=robohash&r=x" alt="chat avatar" />
+    <img className="avatar" src={request.icon_url || "src/assets/default-profile.png"} alt="chat avatar" />
     <div className="text-off_white">
       <h3 className="font-semibold">{request.username}</h3>
     </div>

@@ -12,6 +12,8 @@ export interface IMessage {
   sender_id: number;
   created_at: string;
   room_id: number;
+  username: string;
+  icon_url: string;
 }
 
 export interface IRelationship {
@@ -19,6 +21,7 @@ export interface IRelationship {
   username: string;
   request_id: number;
   reciever_id: number;
+  icon_url: string;
 }
 
 export const getErrorMessage = (error: unknown) => {
