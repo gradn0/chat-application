@@ -17,7 +17,7 @@ const ChatList = ({chats}: {chats: IChat[] | undefined}) => {
     socket.emit("chat-seen", {userId: state.user?.id, chatId: chat.id});
     setSidebarOpen(false);
     setCurrentChat(chat);
-    navigate("/chat");
+    navigate(`/${chat.id}`);
   }
  
   return (

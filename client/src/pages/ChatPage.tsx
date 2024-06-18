@@ -8,10 +8,12 @@ import { queryClient } from "../main";
 import socket from "../socket";
 import { useAuthContext } from "../context/authContext";
 import ChatPageHeader from "../component/ChatPageHeader";
+import { useParams } from "react-router-dom";
 
 const ChatPage = () => {
   const {state} = useAuthContext();
   const {currentChat} = useChatContext();
+  const params = useParams();
 
   const [earliestId, setEarliestId] = useState<number | null>(null);
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -32,6 +34,13 @@ const ChatPage = () => {
       socket.off("new-message");
     }
   }, [currentChat])
+
+  useEffect(() => {
+    return () => {
+      setMessages([]);
+      setEarliestId(null);
+    }
+  }, [params.chatId])
 
   useEffect(() => {
     if (lastMessageRef.current) {
