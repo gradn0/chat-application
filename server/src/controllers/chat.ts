@@ -73,7 +73,7 @@ export const getMessages = async (req: any, res: Response) => {
   const {roomId} = req.params;
   try {
     const messages = earliest
-      ? (await db.query(`SELECT messages.*, users.username, users.icon_url FROM messages INNER JOIN users ON messages.sender_id = users.id WHERE room_id = $1 AND id < $2 ORDER BY id DESC LIMIT $3`, [roomId, earliest, length])).rows
+      ? (await db.query(`SELECT messages.*, users.username, users.icon_url FROM messages INNER JOIN users ON messages.sender_id = users.id WHERE room_id = $1 AND messages.id < $2 ORDER BY messages.id DESC LIMIT $3`, [roomId, earliest, length])).rows
       : (await db.query(`SELECT messages.*, users.username, users.icon_url FROM messages INNER JOIN users ON messages.sender_id = users.id WHERE room_id = $1 ORDER BY id DESC LIMIT $2`, [roomId, length])).rows
     res.status(200).json(messages);
   } catch (error) {
