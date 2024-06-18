@@ -4,6 +4,7 @@ export interface IChat {
   joined_at: string;
   unseen_messages: boolean;
   room_name: string;
+  member_count: number;
 }
 
 export interface IMessage {

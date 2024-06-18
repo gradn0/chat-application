@@ -55,6 +55,7 @@ export const addMember = async (req: any, res: Response) => {
 
     await db.query("INSERT INTO room_members (user_id, room_id, room_name) VALUES ($1, $2, $3)", [id, roomId, roomName]);
     await db.query("UPDATE room_members SET room_name = $1 WHERE room_id = $2", [roomName, roomId]);
+    await db.query("UPDATE rooms SET member_count = member_count + 1 WHERE id = $1", [roomId]);
     
     const recieverIds = (await db.query("SELECT user_id FROM room_members WHERE room_id = $1", [roomId])).rows.map(member => member.user_id);
     recieverIds.forEach(id => {
@@ -72,8 +73,8 @@ export const getMessages = async (req: any, res: Response) => {
   const {roomId} = req.params;
   try {
     const messages = earliest
-      ? (await db.query(`SELECT * FROM messages WHERE room_id = $1 AND id < $2 ORDER BY id DESC LIMIT $3`, [roomId, earliest, length])).rows
-      : (await db.query(`SELECT * FROM messages WHERE room_id = $1 ORDER BY id DESC LIMIT $2`, [roomId, length])).rows
+      ? (await db.query(`SELECT messages.*, users.username, users.icon_url FROM messages INNER JOIN users ON messages.sender_id = users.id WHERE room_id = $1 AND id < $2 ORDER BY id DESC LIMIT $3`, [roomId, earliest, length])).rows
+      : (await db.query(`SELECT messages.*, users.username, users.icon_url FROM messages INNER JOIN users ON messages.sender_id = users.id WHERE room_id = $1 ORDER BY id DESC LIMIT $2`, [roomId, length])).rows
     res.status(200).json(messages);
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});

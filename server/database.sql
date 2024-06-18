@@ -11,6 +11,7 @@ CREATE TABLE users(
 
 CREATE TABLE rooms(
   id INT PRIMARY KEY NOT NULL, 
+  members_count INT NOT NULL default 1,
   icon_url VARCHAR(100)
 );
 
