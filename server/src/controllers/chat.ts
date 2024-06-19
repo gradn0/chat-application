@@ -68,6 +68,23 @@ export const addMember = async (req: any, res: Response) => {
   }
 }
 
+export const removeMember = async (req: any, res: Response) => {
+  const {userId, roomId} = req.query;
+  res.status(200);
+  try {
+    const memberIds = (await db.query("SELECT user_id FROM room_members WHERE room_id = $1", [roomId])).rows.map(member => member.user_id);
+
+    await db.query("DELETE FROM room_members WHERE user_id = $1 AND room_id = $2", [userId, roomId]);
+    await db.query("UPDATE rooms SET member_count = member_count - 1 WHERE id = $1", [roomId]);
+
+    memberIds.forEach(id => {
+      clients[id]?.emit("new-chat", {roomId});
+    })
+  } catch (error) {
+    res.status(400).json({Error: getErrorMessage(error)});
+  }
+}
+
 export const getMessages = async (req: any, res: Response) => {
   const {length, earliest} = req.query;
   const {roomId} = req.params;
