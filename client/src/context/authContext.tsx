@@ -4,12 +4,13 @@ interface User {
   id: number;
   username: string;
   token: string;
+  icon_url: string;
 }
 interface State {
   user: User | null;
 } 
 interface Action {
-  type: "login" | "logout";
+  type: "login" | "logout" | "edit";
   payload: User;
 } 
 interface AuthContext {
@@ -26,6 +27,13 @@ export const authReducer = (state: State, action: Action) => {
     case 'logout':
       localStorage.removeItem("user");
       return {user: null};
+    case 'edit':
+      const current = localStorage.getItem("user");
+      if (current) {
+        const currentJson = JSON.parse(current);
+        localStorage.setItem("user", JSON.stringify({...currentJson, ...action.payload}));
+      }
+      return {user: {...state.user, ...action.payload}};
     default:
       return state;
   }
@@ -36,7 +44,6 @@ const initState = {user: null};
 
 export const AuthContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(authReducer, initState);
-
   useEffect(() => {
     const item = localStorage.getItem("user");
     if (item) {

@@ -12,6 +12,7 @@ import { queryClient } from "../main";
 import { useChatContext } from "../context/chatContext";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
+import ProfileModal from "./ProfileModal";
 
 type TTab = "contacts" | "chats" | "requests";
 
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const [tab, setTab] = useState<TTab>("chats");
   const {state} = useAuthContext();
   const {setSidebarOpen} = useAppContext();
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
   const {currentChat, setCurrentChat, setChats, setContacts} = useChatContext();
   const [newChat, setNewChat] = useState(false);
   const [newContact, setNewContact] = useState(false);
@@ -126,7 +128,8 @@ const Sidebar = () => {
       {tab === "contacts" && <ContactList contacts={contacts}/>}
       {tab === "requests" && <FriendRequests requests={requests}/>}
       <div className="mt-auto">
-        
+        <img onClick={() => setProfileModalOpen(prev => !prev)} className="avatar cursor-pointer" src={state.user?.icon_url || "src/assets/default-profile.png"} alt="chat avatar" />
+        {profileModalOpen && <ProfileModal closeModal={() => setProfileModalOpen(false)}/>}
       </div>
     </div>
   )

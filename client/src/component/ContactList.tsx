@@ -7,14 +7,9 @@ import { IRelationship } from "../common"
 import { MessageIcon } from "./Icons"
 import { useAuthContext } from "../context/authContext"
 
-interface IUserPayload {
-  id: number;
-  username: string;
-}
-
 interface ICreateRoomBody {
-  creator: IUserPayload;
-  recipient: IUserPayload;
+  creatorId: number;
+  recipientId: number;
 }
 
 const ContactList = ({contacts}: {contacts: IRelationship[]}) => {
@@ -37,17 +32,7 @@ const ContactList = ({contacts}: {contacts: IRelationship[]}) => {
   const createRoom = (contact: IRelationship) => {
     if (!state.user) return;
     const recipientId = contact.request_id === state.user.id ? contact.reciever_id : contact.request_id;
-    const body = {
-      creator: {
-        id: state.user.id, 
-        username: state.user.username
-      },
-      recipient: {
-        id: recipientId, 
-        username: contact.username
-      }
-    }
-    createRoomMutation(body);
+    createRoomMutation({creatorId: state.user.id, recipientId: recipientId});
   }
 
   return (
