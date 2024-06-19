@@ -11,6 +11,7 @@ import ChatPage from './pages/ChatPage.tsx'
 import { ChatContextProvider } from './context/chatContext.tsx'
 import { AppContextProvider } from './context/appContext.tsx'
 import { StrictMode } from 'react'
+import NoChatPage from './pages/NoChatPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       <App />
     </ProtectedComponent>,
     children: [
+      {
+        path: "/",
+        element: <NoChatPage />
+      }, 
       {
         path: "/:chatId",
         element: <ChatPage />
