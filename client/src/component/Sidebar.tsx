@@ -47,7 +47,6 @@ const Sidebar = () => {
     queryKey: ["getChats"],
     queryFn: async () => {
       const chats: IChat[] = await fetchFromAPI("chat", "GET");
-
       chats.forEach((chat: IChat) => {
         if (currentChat?.id === chat.id && currentChat.room_name !== chat.room_name) setCurrentChat(chat);
         if (chat.unseen_messages) {
