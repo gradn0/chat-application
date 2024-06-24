@@ -12,7 +12,6 @@ CREATE TABLE users(
 CREATE TABLE rooms(
   id INT PRIMARY KEY NOT NULL, 
   members_count INT NOT NULL default 1,
-  icon_url VARCHAR(100)
 );
 
 CREATE TABLE messages(
@@ -42,6 +41,7 @@ CREATE TABLE room_members(
   unseen_messages BOOLEAN NOT NULL default FALSE,
   room_name VARCHAR(20) NOT NULL,
   joined_at TIMESTAMPTZ NOT NULL default current_timestamp,
+  icon_url VARCHAR(100), 
   CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users (id),
   CONSTRAINT fk_room_id FOREIGN KEY(room_id) REFERENCES rooms (id)
 );

@@ -7,7 +7,7 @@ export const getChats = async (req: any, res: Response) => {
   const {id} = req.user;
   try {
     const chats = (await db.query("\
-      SELECT rooms.*, room_members.joined_at, room_members.unseen_messages, room_members.room_name FROM room_members\
+      SELECT rooms.id, rooms.member_count, room_members.joined_at, room_members.unseen_messages, room_members.room_name, room_members.icon_url FROM room_members\
       INNER JOIN rooms ON room_members.room_id = rooms.id\
       WHERE room_members.user_id = $1", [id])).rows;
     res.status(200).json(chats);
@@ -19,14 +19,15 @@ export const getChats = async (req: any, res: Response) => {
 export const createChat = async (req: any, res: Response) => {
   const {creatorId, recipientId} = req.body;
   try {
-    const creatorName = (await db.query("SELECT * FROM users WHERE id = $1", [creatorId])).rows[0].username;
-    const recipientName = (await db.query("SELECT * FROM users WHERE id = $1", [recipientId])).rows[0].username;
+    const {username: creatorName, icon_url: creatorIcon} = (await db.query("SELECT * FROM users WHERE id = $1", [creatorId])).rows[0];
+    const {username: recipientName, icon_url: recipientIcon} = (await db.query("SELECT * FROM users WHERE id = $1", [recipientId])).rows[0];
 
     const existingRoom = (await db.query("SELECT * FROM room_members WHERE user_id = $1 AND room_name = $2", [creatorId, recipientName])).rows[0]
     if (existingRoom) throw new Error("Room already exists");
 
-    const roomId = (await db.query("INSERT INTO rooms DEFAULT VALUES RETURNING id")).rows[0].id;
-    await db.query("INSERT INTO room_members (room_id, user_id, room_name) VALUES ($1, $2, $3), ($1, $4, $5)", [roomId, creatorId, recipientName, recipientId, creatorName]);
+    const {id: roomId} = (await db.query("INSERT INTO rooms DEFAULT VALUES RETURNING id")).rows[0];
+    await db.query("INSERT INTO room_members (room_id, user_id, room_name, icon_url) VALUES ($1, $2, $3, $4), ($1, $5, $6, $7)", [
+      roomId, creatorId, recipientName, recipientIcon, recipientId, creatorName, creatorIcon]);
 
     clients[creatorId]?.emit("new-chat", {roomId});
     clients[recipientId]?.emit("new-chat", {roomId});
@@ -56,8 +57,9 @@ export const addMember = async (req: any, res: Response) => {
 
     await db.query("INSERT INTO room_members (user_id, room_id, room_name) VALUES ($1, $2, $3)", [id, roomId, roomName]);
     await db.query("UPDATE room_members SET room_name = $1 WHERE room_id = $2", [roomName, roomId]);
-    await db.query("UPDATE rooms SET member_count = member_count + 1 WHERE id = $1", [roomId]);
-    
+    const {member_count} = (await db.query("UPDATE rooms SET member_count = member_count + 1 WHERE id = $1 RETURNING member_count", [roomId])).rows[0];
+    if (member_count > 2) (await db.query("UPDATE room_members SET icon_url = $1 WHERE room_id = $2", [null, roomId]));
+
     const recieverIds = (await db.query("SELECT user_id FROM room_members WHERE room_id = $1", [roomId])).rows.map(member => member.user_id);
     recieverIds.forEach(id => {
       clients[id]?.emit("new-chat", {roomId});
