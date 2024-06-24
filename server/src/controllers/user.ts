@@ -37,6 +37,7 @@ export const login = async (req: Request, res: Response) => {
 export const edit = async (req: Request, res: Response) => {
   const {id} = req.params;
   const {newUsername, oldUsername} = req.body;
+  const iconFile = req.file;
   try {
     await db.query("UPDATE users SET username = $1 WHERE id = $2", [newUsername, id]);
     await db.query("UPDATE room_members SET room_name = $1 WHERE room_name = $2", [newUsername, oldUsername]);
