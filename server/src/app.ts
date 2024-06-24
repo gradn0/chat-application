@@ -7,8 +7,6 @@ import chatRouter from "./routes/chat";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import handleSockets from "./controllers/socket";
-import { getS3Url } from "./s3";
-import { auth } from "./middleware/auth";
 
 const app = express();
 const port = process.env.PORT;
@@ -20,7 +18,6 @@ app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/relationship", relationshipRouter);
 app.use("/api/chat", chatRouter);
-app.get("/api/s3url", (req, res) => getS3Url(req, res));
 
 io.on("connection", (socket) => {
   handleSockets(socket);

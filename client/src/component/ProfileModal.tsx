@@ -1,47 +1,35 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { FormEvent, useState } from "react"
 import { useAuthContext } from "../context/authContext"
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "../helpers";
+import { RefreshIcon } from "./Icons";
+import {v4 as uuidv4} from "uuid";
 
 const ProfileModal = ({closeModal}: {closeModal: () => void}) => {
   const {state, dispatch} = useAuthContext();
   const [username, setUsername] = useState(state.user?.username || "");
-  const [iconFile, setIconFile] = useState<File>();
+  const [imageURL, setImageURL] = useState(state.user?.icon_url);
   
   const {mutateAsync: editProfileMutation} = useMutation({
     mutationFn: async () => {
       const formData = new FormData();
+
       state.user && formData.append("oldUsername", state.user.username);
-      formData.append("newUsername", username);
-
-      let imageUrl;
-      if (iconFile && state.user) {
-        const res = await fetch(`${BASE_URL}/api/s3url`);
-        const {url} = await res.json();
-
-        await fetch(url, {
-          method: "PUT",
-          body: iconFile
-        })
-        imageUrl = url.split("?")[0];
-        
-        formData.append("iconUrl", imageUrl);
-        state.user.icon_url = imageUrl;
-      }
+      if (username !== state.user?.username) formData.append("newUsername", username);
+      imageURL && formData.append("iconUrl", imageURL);
 
       const res = await fetch(`${BASE_URL}/api/user/edit/${state.user?.id}`, {
         method: "POST",
         body: formData, 
       });
       const data = await res.json();
-      dispatch({type: "edit", payload: {username: data.username, icon_url: imageUrl ? imageUrl : null}});
+      dispatch({type: "edit", payload: {username: data.username, icon_url: data.icon_url}});
     }
   })
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setIconFile(e.target.files[0]);
-    }
+  const refreshImage = () => {
+    const imageId = uuidv4();
+    setImageURL(`https://i.pravatar.cc/150?u=${imageId}`);
   }
 
   const handleSubmit = (e: FormEvent) => {
@@ -61,13 +49,11 @@ const ProfileModal = ({closeModal}: {closeModal: () => void}) => {
           <input id="username" className="p-2 text-small focus:outline-none mb-4" value={username} type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
         </label>
 
-        <label className="text-small space-y-2">
-          <p className="text-small text-neutral-500">Profile Icon</p>
-          <input id="icon" className="text-small focus:outline-none mb-4" type="file" onChange={handleFileChange}/>
-        </label>
-
+        <div className="flex items-center justify-center gap-[2em]">
+          <img className="w-[5em]" src={imageURL} />
+          <span className="cursor-pointer" onClick={refreshImage}><RefreshIcon color="grey"/></span>
+        </div>
         <button>Update</button>
-        
       </form>
       
     </div>

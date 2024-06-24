@@ -35,7 +35,6 @@ export const getRelationship = async (req: any, res: Response, status: TStatus) 
       ON (relationships.request_id = users.id AND relationships.request_id != $1) OR (relationships.reciever_id = users.id AND relationships.reciever_id != $1)\
       WHERE (request_id = $1 OR reciever_id = $1) AND status = $2", 
       [id, status])).rows;
-    
     res.status(200).json(relationships);
   } catch (error) {
     res.status(400).json({Error: getErrorMessage(error)});
