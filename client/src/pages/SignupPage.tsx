@@ -12,7 +12,7 @@ const SignupPage = () => {
   const {dispatch} = useAuthContext();
   const navigate = useNavigate();
 
-  const {mutateAsync: signupMutation, isPending} = useMutate("POST", "user/signup", {email, username, password});
+  const {mutateAsync: signupMutation, isPending} = useMutate("POST", "user/signup", {email: email.trim(), username: username.trim(), password: password.trim()});
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
