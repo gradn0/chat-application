@@ -4,7 +4,7 @@ CREATE TABLE users(
   id INT PRIMARY KEY NOT NULL,
   username VARCHAR(200) NOT NULL,
   email VARCHAR(200) NOT NULL, 
-  icon_url VARCHAR(50) default NULL
+  icon_url VARCHAR(200) default NULL
   password VARCHAR(200) NOT NULL,
   UNIQUE (email, username)
 );

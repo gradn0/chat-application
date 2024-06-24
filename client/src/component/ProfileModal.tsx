@@ -12,16 +12,29 @@ const ProfileModal = ({closeModal}: {closeModal: () => void}) => {
     mutationFn: async () => {
       const formData = new FormData();
       state.user && formData.append("oldUsername", state.user.username);
-      state.user && formData.append("newUsername", username);
-      iconFile  && formData.append("iconFile", iconFile);
+      formData.append("newUsername", username);
+
+      let imageUrl;
+      if (iconFile && state.user) {
+        const res = await fetch(`${BASE_URL}/api/s3url`);
+        const {url} = await res.json();
+
+        await fetch(url, {
+          method: "PUT",
+          body: iconFile
+        })
+        imageUrl = url.split("?")[0];
+        
+        formData.append("iconUrl", imageUrl);
+        state.user.icon_url = imageUrl;
+      }
 
       const res = await fetch(`${BASE_URL}/api/user/edit/${state.user?.id}`, {
         method: "POST",
         body: formData, 
       });
       const data = await res.json();
-
-      dispatch({type: "edit", payload: {username: data.username}});
+      dispatch({type: "edit", payload: {username: data.username, icon_url: imageUrl ? imageUrl : null}});
     }
   })
 
