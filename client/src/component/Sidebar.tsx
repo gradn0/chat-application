@@ -102,7 +102,7 @@ const Sidebar = () => {
   return (
     <div className="bg-dark_accent size-full p-[2em] flex flex-col gap-[1em] rounded-r-xl">
       <div className="flex items-center mb-[1em]">
-        <h2 className="text-heading font-bold text-off_white">PhotoShare</h2>
+        <h2 className="text-heading font-bold text-off_white">Chatter</h2>
         <span className="cursor-pointer ml-auto desktop:hidden" onClick={() => setSidebarOpen(false)}><ChevronLeftIcon color="white" /></span>
       </div>
       <div className="flex gap-[3em]">

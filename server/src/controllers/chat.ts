@@ -7,7 +7,7 @@ export const getChats = async (req: any, res: Response) => {
   const {id} = req.user;
   try {
     const chats = (await db.query("\
-      SELECT rooms.id, rooms.member_count, room_members.joined_at, room_members.unseen_messages, room_members.room_name, room_members.icon_url FROM room_members\
+      SELECT rooms.id, rooms.member_count, room_members.joined_at, room_members.unseen_messages, room_members.room_name, room_members.icon_url, room_members.is_admin FROM room_members\
       INNER JOIN rooms ON room_members.room_id = rooms.id\
       WHERE room_members.user_id = $1", [id])).rows;
     res.status(200).json(chats);
@@ -26,8 +26,8 @@ export const createChat = async (req: any, res: Response) => {
     if (existingRoom) throw new Error("Room already exists");
 
     const {id: roomId} = (await db.query("INSERT INTO rooms DEFAULT VALUES RETURNING id")).rows[0];
-    await db.query("INSERT INTO room_members (room_id, user_id, room_name, icon_url) VALUES ($1, $2, $3, $4), ($1, $5, $6, $7)", [
-      roomId, creatorId, recipientName, recipientIcon, recipientId, creatorName, creatorIcon]);
+    await db.query("INSERT INTO room_members (room_id, user_id, room_name, icon_url, is_admin) VALUES ($1, $2, $3, $4, $8), ($1, $5, $6, $7, $9)", [
+      roomId, creatorId, recipientName, recipientIcon, recipientId, creatorName, creatorIcon, true, false]);
 
     clients[creatorId]?.emit("new-chat", {roomId});
     clients[recipientId]?.emit("new-chat", {roomId});

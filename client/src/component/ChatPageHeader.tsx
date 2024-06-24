@@ -25,8 +25,8 @@ const ChatPageHeader = ({chat}: {chat: IChat}) => {
     <div className="bg-dark_white text-neutral-700 h-[10%] shadow-md text-xl sm:text-2xl flex items-center px-[2em] font-normal">
       {chat && <div className="flex items-center gap-10">
         <h2 className="mb-1 text-2xl font-semibold">{chat.room_name}</h2>
-        <span className="cursor-pointer" onClick={() => setModalOpen(true)}><AddContactIcon color="grey"/></span>
-        {chat.member_count > 2 && <span className="cursor-pointer" onClick={leaveChat}><ExitIcon color="grey"/></span>}
+        {chat.is_admin && <span className="cursor-pointer" onClick={() => setModalOpen(true)}><AddContactIcon color="grey"/></span>}
+        {!chat.is_admin && <span className="cursor-pointer" onClick={leaveChat}><ExitIcon color="grey"/></span>}
       </div>}
       {modalOpen && <AddContactModal chat={chat} closeModal={() => setModalOpen(false)}/>}
     </div>

@@ -22,12 +22,12 @@ const ChatCard = ({chat, selected}: {chat: IChat, selected: boolean}) => {
       <div className="text-off_white">
         <h3 className="font-semibold">{chat.room_name}</h3>
       </div>
-      <span 
+      {chat.is_admin && <span 
         className="hover:bg-accent p-2 rounded-full cursor-pointer relative ml-auto"
         onClick={() => deleteChatMutation()}
       >
         <CrossIcon color="white" />
-      </span>
+      </span>}
     </div>
   )
 }
