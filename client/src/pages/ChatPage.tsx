@@ -9,6 +9,7 @@ import socket from "../socket";
 import { useAuthContext } from "../context/authContext";
 import ChatPageHeader from "../component/ChatPageHeader";
 import { useParams } from "react-router-dom";
+import { SendIcon } from "../component/Icons";
 
 const ChatPage = () => {
   const {state} = useAuthContext();
@@ -88,12 +89,13 @@ const ChatPage = () => {
         <div ref={lastMessageRef}></div>
       </div>
 
-      <form className="mx-auto w-[95%]" onSubmit={(e) => sendMessage(e)}>
-      <input 
-        ref={textFieldRef} 
-        type="text" 
-        className="mt-auto bg-grey text-black bg-opacity-60 focus:outline-none p-3 placeholder:text-neutral-500 m-3 rounded w-[90%] mx-auto" 
-        placeholder="Type your message here..." />
+      <form className="mx-auto w-[95%] flex items-center my-3 gap-2 sm:gap-4" onSubmit={(e) => sendMessage(e)}>
+        <input 
+          ref={textFieldRef} 
+          type="text" 
+          className="mt-auto bg-grey text-black bg-opacity-60 focus:outline-none p-3 placeholder:text-neutral-500 rounded w-[90%]" 
+          placeholder="Type your message here..." />
+          <span className="cursor-pointer" onClick={sendMessage}><SendIcon color="#737373"/></span>
       </form>
     </div>
   )

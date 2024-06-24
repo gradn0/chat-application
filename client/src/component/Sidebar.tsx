@@ -123,13 +123,16 @@ const Sidebar = () => {
         </span>
 
       </div>
-      <input className="searchBar p-3" type="text" placeholder="Search..."/>
+
+      <p className="text-off_white font-semibold items-center text-subheading">{tab.charAt(0).toUpperCase() + tab.slice(1)}</p>
+      <span className="w-full h-[1px] bg-neutral-300"></span>
       {tab === "chats" && <ChatList chats={chats}/>}
       {tab === "contacts" && <ContactList contacts={contacts}/>}
       {tab === "requests" && <FriendRequests requests={requests}/>}
-      <div className="mt-auto">
+      <div className="mt-auto flex items-center gap-4">
         <img onClick={() => setProfileModalOpen(prev => !prev)} className="avatar cursor-pointer" src={state.user?.icon_url || "src/assets/default-profile.png"} alt="chat avatar" />
         {profileModalOpen && <ProfileModal closeModal={() => setProfileModalOpen(false)}/>}
+        <p className="text-off_white font-semibold items-center">{state.user?.username}</p>
       </div>
     </div>
   )

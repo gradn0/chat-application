@@ -40,7 +40,7 @@ const ContactList = ({contacts}: {contacts: IRelationship[]}) => {
       {contacts.map(contact => 
         <span key={contact.id} className="flex items-center text-off_white font-semibold">
           <ContactCard contact={contact} selected={false}/>
-          <span className="cursor-pointer ml-auto" onClick={() => createRoom(contact)}><MessageIcon color="white"/></span>
+          <span className="cursor-pointer ml-auto hover:bg-accent p-2 rounded-full" onClick={() => createRoom(contact)}><MessageIcon color="white"/></span>
         </span>
       )}
       <div className="flex mt-auto gap-2">
