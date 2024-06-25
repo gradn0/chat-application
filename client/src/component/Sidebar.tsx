@@ -26,7 +26,12 @@ const Sidebar = () => {
   const [newContact, setNewContact] = useState(false);
   const [newRequest, setNewRequest] = useState(false);
   const navigate = useNavigate();
-  
+  const {dispatch} = useAuthContext();
+
+  const logout = () => {
+    dispatch({type: "logout"});
+    navigate("/login");
+  }
   
   const {data: requests} = useQuery({
     queryKey: ["getRequests"],
@@ -100,7 +105,7 @@ const Sidebar = () => {
   })
 
   return (
-    <div className="bg-dark_accent size-full p-[2em] flex flex-col gap-[1em] rounded-r-xl">
+    <div className="bg-dark_accent size-full p-[2em] flex flex-col gap-[1em] rounded-r-xl relative z-20">
       <div className="flex items-center mb-[1em]">
         <h2 className="text-heading font-bold text-off_white">Chatter</h2>
         <span className="cursor-pointer ml-auto desktop:hidden" onClick={() => setSidebarOpen(false)}><ChevronLeftIcon color="white" /></span>
@@ -133,6 +138,7 @@ const Sidebar = () => {
         <img onClick={() => setProfileModalOpen(prev => !prev)} className="avatar cursor-pointer" src={state.user?.icon_url || "src/assets/default-profile.png"} alt="chat avatar" />
         {profileModalOpen && <ProfileModal closeModal={() => setProfileModalOpen(false)}/>}
         <p className="text-off_white font-semibold items-center">{state.user?.username}</p>
+        <button className="btn ml-auto" onClick={logout}>Logout</button>
       </div>
     </div>
   )

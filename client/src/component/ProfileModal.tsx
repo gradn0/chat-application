@@ -53,7 +53,7 @@ const ProfileModal = ({closeModal}: {closeModal: () => void}) => {
           <img className="w-[5em]" src={imageURL} />
           <span className="cursor-pointer" onClick={refreshImage}><RefreshIcon color="grey"/></span>
         </div>
-        <button>Update</button>
+        <button className="btn">Update</button>
       </form>
       
     </div>

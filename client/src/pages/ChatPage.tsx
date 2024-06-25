@@ -54,7 +54,7 @@ const ChatPage = () => {
   useQuery({
     queryKey: ["getMessages", currentChat?.id],
     queryFn: async () => {
-      if (!currentChat) return;
+      if (!currentChat) return false;
       const data =  (await fetchFromAPI(`chat/${currentChat.id}/messages/?length=7` + (earliestId ? `&earliest=${earliestId}` : ""), "GET")).reverse();
       setEarliestId(data[0].id);
 

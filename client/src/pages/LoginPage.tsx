@@ -38,7 +38,7 @@ const SignupPage = () => {
         <input className="authField" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
 
         <p className="text-red-700 text-small min-h-[2em]">{error && error}</p>
-        <button disabled={isPending} className="w-[80%]">{isPending ? "Loading..." : "Log in"}</button>
+        <button disabled={isPending} className="w-[80%] btn">{isPending ? "Loading..." : "Log in"}</button>
         <a href="/signup" className="text-small sm:mt-3">Create an account</a>
       </form>
     </div>
